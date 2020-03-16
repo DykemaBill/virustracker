@@ -1,5 +1,5 @@
-from flask import Flask, render_template, json, redirect, url_for, request
-import logging, time
+from flask import Flask, render_template, json, request
+import requests, logging, time
 
 # Setup logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO, filename='virustracker.log')
@@ -13,7 +13,7 @@ virustracker_logo = ""
 virustracker_email = ""
 virustracker_apiroot = ""
 
-# Read configuration file for redirects
+# Read configuration file
 config_error = False
 dataread_records = []
 def config_file_read():
@@ -37,6 +37,16 @@ def config_file_read():
         config_error = True
 
 config_file_read()
+
+# Get updated data for US and Canada in North America
+pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
+data_us = requests.get(virustracker_apiroot + "/countries/USA")
+if data_us.status_code == 200:
+    print("Got USA data: " + data_us.text)
+    data_us_confirmed = data_us['confirmed'][0]['value'] # Need to fix this
+    print("US confirmed is: " + data_us_confirmed)
+else:
+    print("No USA data: " + data_us.text)
 
 # Create Flask app to build site
 app = Flask(__name__)
