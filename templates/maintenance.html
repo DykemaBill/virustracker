@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Virus Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styling.css') }}">
+</head>
+<body>
+    <font face="arial">
+    <div class="wrapper">
+
+            <img src="{{ logo }}">
+
+        <div>
+            
+            <center>
+                <H1>NOTICE</H1>
+            
+                <h3><p>Date: <span id="datetime"></span></p>
+                <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
+            </center>
+
+        </div>
+
+        <div>
+
+            We are performing some maintenance tasks.
+            <br><br>
+            Thank you for your patience!
+
+        </div>
+
+        <div>
+
+            <h3>Contact us for questions at <a href="mailto: {{ email }}">Support</a></h3>
+
+        </div>
+
+    </div>
+    </font>
+</body>
+</html>

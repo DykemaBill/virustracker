@@ -1,0 +1,15 @@
+.wrapper{
+    display:grid;
+    grid-template-columns: 100%;
+    grid-gap:1em;
+  }
+.wrapper > div{
+  background:#eee;
+  padding:1em;
+  max-width: 1000px;
+}
+.formarea{
+  background:rgb(215, 215, 215);
+  padding:1em;
+  max-width: 1000px;
+}
