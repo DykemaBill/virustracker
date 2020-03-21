@@ -8,7 +8,7 @@ Web application written in Python using Flask which provides a single root page 
 
 - Support email address for your page
 - Page logo (set to [World Health Organization](http://who.int)'s logo by default)
-- API root (set to [Muhammad Mustadi](https://mathdro.id)'s [COVID-19 JSON API](https://github.com/mathdroid/covid-19-api) by default
+- API root (set to [Muhammad Mustadi](https://mathdro.id)'s [COVID-19 JSON API](https://github.com/mathdroid/covid-19-api) by default)
 - Countries, can be used to set the countries you would like to see information on
 
 # To-Do's for the author
@@ -24,6 +24,6 @@ Web application written in Python using Flask which provides a single root page 
 [MIT License 2020](https://mit-license.org), [Bill Dykema](https://github.com/DykemaBill).
 
 This Python Flask application uses [Muhammad Mustadi](https://mathdro.id)'s [COVID-19 JSON API](https://github.com/mathdroid/covid-19-api) to get data.
-Data comes from the [John Hopkins University](https://www.jhu.edu), it may not be used for commercial purposes.
+Data comes from the [Johns Hopkins University](https://www.jhu.edu), it may not be used for commercial purposes.
 
 ![virustracker_screenshot](https://github.com/DykemaBill/virustracker/blob/master/virustrackerSS.png)
