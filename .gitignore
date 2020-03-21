@@ -2,3 +2,4 @@
 *_backup.*
 *_old.*
 .DS_Store
+.vscode

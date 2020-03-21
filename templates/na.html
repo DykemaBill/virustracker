@@ -11,7 +11,7 @@
     <font face="arial">
         <div class="wrapper">
     
-                <img src="{{ logo }}">
+            <img src="{{ logo }}" style="width:300px;height:243px;">
     
             <div>
                 
@@ -30,6 +30,15 @@
     
             </div>
     
+            <div>
+    
+                US Confirmed Cases: {{ data_us_confirmed }}<br>
+                US Recovered: {{ data_us_recovered }}<br>
+                US Deaths: {{ data_us_deaths }}<br>
+                Last Updated: {{ data_us_updated }}
+    
+            </div>
+
             <div>
     
                 <h3>Contact us for questions at <a href="mailto: {{ email }}">Support</a></h3>

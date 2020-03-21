@@ -8,12 +8,12 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO, file
 config_file = 'config'
 logging.info('Reading config file ' + config_file + '.json')
 
-# Configuration variables
+# Read configuration variables
 virustracker_logo = ""
 virustracker_email = ""
 virustracker_apiroot = ""
 
-# Read configuration file
+# Function to read configuration file
 config_error = False
 dataread_records = []
 def config_file_read():
@@ -36,17 +36,41 @@ def config_file_read():
         global config_error
         config_error = True
 
+# Read configuration file
 config_file_read()
 
-# Get updated data for US and Canada in North America
-pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
-data_us = requests.get(virustracker_apiroot + "/countries/USA")
-if data_us.status_code == 200:
-    print("Got USA data: " + data_us.text)
-    data_us_confirmed = data_us['confirmed'][0]['value'] # Need to fix this
-    print("US confirmed is: " + data_us_confirmed)
-else:
-    print("No USA data: " + data_us.text)
+# Data variables
+data_us_confirmed = 0
+data_us_recovered = 0
+data_us_deaths = 0
+data_us_updated = ""
+
+# Function to pull data
+def data_us_pull():
+    # Get updated data for US and Canada in North America
+    pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
+    data_us = requests.get(virustracker_apiroot + "/countries/USA")
+    if data_us.status_code == 200:
+        print("Got USA data: " + data_us.text)
+        data_us_json = data_us.json()
+        global data_us_confirmed
+        global data_us_recovered
+        global data_us_deaths
+        global data_us_updated
+        data_us_confirmed = int(data_us_json['confirmed']['value'])
+        print("US confirmed is: " + str(data_us_confirmed))
+        data_us_recovered = int(data_us_json['recovered']['value'])
+        print("US recovered is: " + str(data_us_recovered))
+        data_us_deaths = int(data_us_json['deaths']['value'])
+        print("US deaths is: " + str(data_us_deaths))
+        data_us_updated = data_us_json['lastUpdate']
+        print("Updated: " + data_us_updated)
+        logging.info(data_us_updated + ' ==> US confirmed: ' + str(data_us_confirmed) + ', recovered: ' + str(data_us_recovered) + ', deaths: ' + str(data_us_deaths))
+    else:
+        print("No USA data: " + data_us.text)
+
+# Pull data
+data_us_pull()
 
 # Create Flask app to build site
 app = Flask(__name__)
@@ -55,7 +79,7 @@ app = Flask(__name__)
 @app.route('/')
 def root():
     logging.info(request.remote_addr + ' ==> Root page ')
-    return render_template('na.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email)
+    return render_template('na.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, data_us_confirmed=data_us_confirmed, data_us_recovered=data_us_recovered, data_us_deaths=data_us_deaths, data_us_updated=data_us_updated)
 
 # About page
 @app.route('/about')
