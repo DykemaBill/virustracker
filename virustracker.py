@@ -80,6 +80,14 @@ def data_world_pull():
 # Pull data
 data_world_pull()
 
+# Class to collect array and then pass to HTML page
+class JSONtoArray:
+    def __init__(self, confirmed, recovered, deaths, lastUpdate):
+        self.virusdata_confirmed = confirmed
+        self.virusdata_recovered = recovered
+        self.virusdata_deaths = deaths
+        self.virusdata_updated = lastUpdate
+
 # Data variables
 countries_data = []
 
@@ -90,7 +98,6 @@ def data_countries_pull():
     global countries_data
     countries_data.clear()
     for country in countries_config:
-        print (country)
         virusdata_country = requests.get(virustracker_apiroot + "/countries/" + country)
         if virusdata_country.status_code == 200:
             print("Got " + country + " data: " + virusdata_country.text)
@@ -104,8 +111,7 @@ def data_countries_pull():
             virusdata_country_updated = virusdata_country_json['lastUpdate']
             print(country + " updated: " + virusdata_country_updated)
             logging.info(virusdata_country_updated + ' ==> ' + country + ' confirmed: ' + str(virusdata_country_confirmed) + ', recovered: ' + str(virusdata_country_recovered) + ', deaths: ' + str(virusdata_country_deaths))
-            countries_data.append([country, virusdata_country_confirmed, virusdata_country_recovered, virusdata_country_updated])
-            print("Country array is " + str(countries_data))
+            countries_data.append(JSONtoArray(**virusdata_country_json)) # Using this to make it easier to use with Jinja
         else:
             print("No " + country + " data: " + virusdata_country.text)
             logging.info(country + '  ==> failed to get data')
@@ -122,7 +128,7 @@ def root():
     logging.info(request.remote_addr + ' ==> Root page ')
     data_world_pull()
     data_countries_pull()
-    return render_template('main.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_recovered=virusdata_world_recovered, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_updated=virusdata_world_updated, countries_data=countries_data)
+    return render_template('main.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_recovered=virusdata_world_recovered, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data)
 
 # About page
 @app.route('/about')

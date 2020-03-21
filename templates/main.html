@@ -26,32 +26,37 @@
     
             <div>
     
-                This page provides virus tracking information for the world and select countries.
+                This page provides virus tracking information for the world and select countries for <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen" target="_blank">COVID-19</a>.
     
             </div>
     
             <div>
     
-                World Confirmed Cases: {{ virusdata_world_confirmed }}<br>
-                World Recovered: {{ virusdata_world_recovered }}<br>
-                World Deaths: {{ virusdata_world_deaths }}<br>
-                Last Updated: {{ virusdata_world_updated }}
+                <!-- World data here -->
+                Location: World<br>
+                Confirmed: {{ virusdata_world_confirmed }}<br>
+                Recovered: {{ virusdata_world_recovered }}<br>
+                Deaths: {{ virusdata_world_deaths }}<br>
+                Last Updated (GMT): {{ virusdata_world_updated }}
     
             </div>
 
-
-            <div>
             {% for country_data in countries_data %}
+            <div>
+            
+                <!-- Country data here -->
+                Location: {{ country_names[loop.index-1] }}<br>
+                Confirmed: {{ country_data['virusdata_confirmed']['value'] }}<br>
+                Recovered: {{ country_data['virusdata_recovered']['value'] }}<br>
+                Deaths: {{ country_data['virusdata_deaths']['value'] }}<br>
+                Last updated (GMT): {{ country_data['virusdata_updated'] }}<br>
 
-            Data right here if this worked:
-            {{ country_data }}<br>
-
-            {% endfor %}
             </div>
+            {% endfor %}
 
             <div>
     
-                <h3>Contact for questions at <a href="mailto: {{ email }}">Support</a></h3>
+                <h3>Information <a href="about">about</a> this page</h3>
     
             </div>
     
