@@ -8,35 +8,33 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styling.css') }}">
 </head>
 <body>
-    <font face="arial">
-        <div class="wrapper">
-    
-            <img src="{{ logo }}" style="width:300px;height:243px;">
-    
-            <div>
-                
-                <center>
-                    <H1>Virus Tracker</H1>
-                
-                    <h3><p>Date: <span id="datetime"></span></p>
-                    <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
-                </center>
-    
-            </div>
-    
-            <div>
-    
-                This page provides virus tracking information for the world and select countries for COVID-19 using the public API provided by Muhammad Mustadi at {{ apiroot }}.
-    
-            </div>
-    
-            <div>
-    
-                <h3>Contact for questions at <a href="mailto: {{ email }}">Support</a></h3>
-    
-            </div>
-    
+    <div class="wrapper">
+
+        <div class="header">
+
+        <div>
+            <img src="{{ logo }}" style="width:150px;height:122px;">
         </div>
-    </font>
+
+        <H1>Virus Tracker</H1>
+                
+        <h3><p>Date: <span id="datetime"></span></p>
+        <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
+
+        </div>
+
+        <div class="description">
+
+            This <a href=".">page</a> provides virus tracking information for the world and select countries for <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen" target="_blank">COVID-19</a> using the public <a href="{{ apiroot }}" target="_blank">API</a> provided by <a href="http://mathdro.id" target="_blank">Muhammad Mustadi</a>.
+
+        </div>
+
+        <div class="description">
+
+            <h3>Contact for questions at <a href="mailto: {{ email }}">Support</a></h3>
+
+        </div>
+
+    </div>
 </body>
 </html>

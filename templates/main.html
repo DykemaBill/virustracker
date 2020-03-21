@@ -8,77 +8,75 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styling.css') }}">
 </head>
 <body>
-    <font face="arial">
-        <div class="wrapper">
-    
-            <div class="description">
+    <div class="wrapper">
 
-            <div>
-                <img src="{{ logo }}" style="width:150px;height:122px;">
-            </div>
+        <div class="header">
 
-                <H1>Virus Tracker</H1>
-            
-                <h3><p>Date: <span id="datetime"></span></p>
-                <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
-    
-            </div>
-    
-            <div class="description">
-    
-                This page provides virus tracking information for the world and select countries for <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen" target="_blank">COVID-19</a>.
-    
-            </div>
-    
-            <!-- World data here -->
-            <div class="title">
-                <h2>World</h2>
-                <h5>Last Updated (GMT): {{ virusdata_world_updated }}</h5>
-            </div>
-            <div class="nested">
-                <div>
-                    <p>Confirmed</p>
-                    <h1>{{ virusdata_world_confirmed }}</h1>
-                </div>
-                <div>
-                    <p>Recovered</p>
-                    <h1>{{ virusdata_world_recovered }}</h1>
-                </div>
-                <div>
-                    <p>Deaths</p>
-                    <h1>{{ virusdata_world_deaths }}</h1>
-                </div>
-            </div>
-
-            <!-- Country data here -->
-            {% for country_data in countries_data %}
-            <div class="title">
-                <h2>{{ country_names[loop.index-1] }}</h2>
-                <h5>Last updated (GMT): {{ country_data['virusdata_updated'] }}</h5>
-            </div>
-            <div class="nested">
-                <div>
-                    <p>Confirmed</p>
-                    <h1>{{ country_data['virusdata_confirmed']['value'] }}</h1>
-                </div>
-                <div>
-                    <p>Recovered</p>
-                    <h1>{{ country_data['virusdata_recovered']['value'] }}</h1>
-                </div>
-                <div>
-                    <p>Deaths</p>
-                    <h1>{{ country_data['virusdata_deaths']['value'] }}</h1>
-                </div>
-            </div>
-            {% endfor %}
-
-            <div>
-    
-                <h3>Information <a href="about">about</a> this page</h3>
-    
-            </div>
-    
+        <div>
+            <img src="{{ logo }}" style="width:150px;height:122px;">
         </div>
-    </font>
+
+            <H1>Virus Tracker</H1>
+        
+            <h3><p>Date: <span id="datetime"></span></p>
+            <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
+
+        </div>
+
+        <div class="description">
+
+            This page provides virus tracking information for the world and select countries for <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019/events-as-they-happen" target="_blank">COVID-19</a>.
+
+        </div>
+
+        <!-- World data here -->
+        <div class="title">
+            <h1>World</h1>
+            <h5>Last Updated (GMT): {{ virusdata_world_updated }}</h5>
+        </div>
+        <div class="kpis">
+            <div class="kpi_yellow">
+                <p>Confirmed</p>
+                <h1>{{ virusdata_world_confirmed }}</h1>
+            </div>
+            <div class="kpi_green">
+                <p>Recovered</p>
+                <h1>{{ virusdata_world_recovered }}</h1>
+            </div>
+            <div class="kpi_red">
+                <p>Deaths</p>
+                <h1>{{ virusdata_world_deaths }}</h1>
+            </div>
+        </div>
+
+        <!-- Country data here -->
+        {% for country_data in countries_data %}
+        <div class="title">
+            <h1>{{ country_names[loop.index-1] }}</h1>
+            <h5>Last updated (GMT): {{ country_data['virusdata_updated'] }}</h5>
+        </div>
+        <div class="kpis">
+            <div class="kpi_yellow">
+                <p>Confirmed</p>
+                <h1>{{ country_data['virusdata_confirmed']['value'] }}</h1>
+            </div>
+            <div class="kpi_green">
+                <p>Recovered</p>
+                <h1>{{ country_data['virusdata_recovered']['value'] }}</h1>
+            </div>
+            <div class="kpi_red">
+                <p>Deaths</p>
+                <h1>{{ country_data['virusdata_deaths']['value'] }}</h1>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="description">
+
+            <h3>Information <a href="about">about</a> this page</h3>
+
+        </div>
+
+    </div>
 </body>
 </html>
