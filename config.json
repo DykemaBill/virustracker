@@ -1,5 +1,6 @@
 {
     "email": "virustracker@dykema.org",
     "logo": "https://www.who.int/ResourcePackages/WHO/assets/dist/images/logos/en/h-logo-black.svg",
-    "apiroot": "https://covid19.mathdro.id/api"
+    "apiroot": "https://covid19.mathdro.id/api",
+    "countries": [ "USA", "CAN" ]
 }

@@ -4,6 +4,9 @@ import requests, logging, time
 # Setup logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO, filename='virustracker.log')
 
+# Starting up
+logging.info('****====****====****====****====****==== Starting up ====****====****====****====****====****')
+
 # Configuration file name
 config_file = 'config'
 logging.info('Reading config file ' + config_file + '.json')
@@ -15,9 +18,10 @@ virustracker_apiroot = ""
 
 # Function to read configuration file
 config_error = False
-dataread_records = []
+countries_config = []
 def config_file_read():
-    dataread_records.clear()
+    global countries_config
+    countries_config.clear()
     try:
         with open(config_file + '.json', 'r') as json_file:
             json_data = json.loads(json_file.read())
@@ -30,6 +34,9 @@ def config_file_read():
             logging.info('API path root is set to: ' + virustracker_apiroot)
             virustracker_email = json_data['email']
             logging.info('Email is set to: ' + virustracker_email)
+            for country in json_data['countries']:
+                countries_config.append(country)
+            logging.info('Countries to display: ' + str(countries_config))
     except IOError:
         print('Problem opening ' + config_file + '.json, check to make sure your configuration file is not missing.')
         logging.info('Problem opening ' + config_file + '.json, check to make sure your configuration file is not missing.')
@@ -40,37 +47,71 @@ def config_file_read():
 config_file_read()
 
 # Data variables
-data_us_confirmed = 0
-data_us_recovered = 0
-data_us_deaths = 0
-data_us_updated = ""
+virusdata_world_confirmed = 0
+virusdata_world_recovered = 0
+virusdata_world_deaths = 0
+virusdata_world_updated = ""
 
 # Function to pull data
-def data_us_pull():
-    # Get updated data for US and Canada in North America
+def data_world_pull():
+    # Get updated data for entire world
     pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
-    data_us = requests.get(virustracker_apiroot + "/countries/USA")
-    if data_us.status_code == 200:
-        print("Got USA data: " + data_us.text)
-        data_us_json = data_us.json()
-        global data_us_confirmed
-        global data_us_recovered
-        global data_us_deaths
-        global data_us_updated
-        data_us_confirmed = int(data_us_json['confirmed']['value'])
-        print("US confirmed is: " + str(data_us_confirmed))
-        data_us_recovered = int(data_us_json['recovered']['value'])
-        print("US recovered is: " + str(data_us_recovered))
-        data_us_deaths = int(data_us_json['deaths']['value'])
-        print("US deaths is: " + str(data_us_deaths))
-        data_us_updated = data_us_json['lastUpdate']
-        print("Updated: " + data_us_updated)
-        logging.info(data_us_updated + ' ==> US confirmed: ' + str(data_us_confirmed) + ', recovered: ' + str(data_us_recovered) + ', deaths: ' + str(data_us_deaths))
+    virusdata_world = requests.get(virustracker_apiroot)
+    if virusdata_world.status_code == 200:
+        print("Got entire world data: " + virusdata_world.text)
+        virusdata_world_json = virusdata_world.json()
+        global virusdata_world_confirmed
+        global virusdata_world_recovered
+        global virusdata_world_deaths
+        global virusdata_world_updated
+        virusdata_world_confirmed = int(virusdata_world_json['confirmed']['value'])
+        print("World confirmed is: " + str(virusdata_world_confirmed))
+        virusdata_world_recovered = int(virusdata_world_json['recovered']['value'])
+        print("World recovered is: " + str(virusdata_world_recovered))
+        virusdata_world_deaths = int(virusdata_world_json['deaths']['value'])
+        print("World deaths is: " + str(virusdata_world_deaths))
+        virusdata_world_updated = virusdata_world_json['lastUpdate']
+        print("Updated: " + virusdata_world_updated)
+        logging.info(virusdata_world_updated + ' ==> World confirmed: ' + str(virusdata_world_confirmed) + ', recovered: ' + str(virusdata_world_recovered) + ', deaths: ' + str(virusdata_world_deaths))
     else:
-        print("No USA data: " + data_us.text)
+        print("No world data: " + virusdata_world.text)
+        logging.info('World  ==> failed to get data')
 
 # Pull data
-data_us_pull()
+data_world_pull()
+
+# Data variables
+countries_data = []
+
+# Function to pull countries data
+def data_countries_pull():
+    # Get updated data for countries
+    pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
+    global countries_data
+    countries_data.clear()
+    for country in countries_config:
+        print (country)
+        virusdata_country = requests.get(virustracker_apiroot + "/countries/" + country)
+        if virusdata_country.status_code == 200:
+            print("Got " + country + " data: " + virusdata_country.text)
+            virusdata_country_json = virusdata_country.json()
+            virusdata_country_confirmed = int(virusdata_country_json['confirmed']['value'])
+            print(country + " confirmed is: " + str(virusdata_country_confirmed))
+            virusdata_country_recovered = int(virusdata_country_json['recovered']['value'])
+            print(country + " recovered is: " + str(virusdata_country_recovered))
+            virusdata_country_deaths = int(virusdata_country_json['deaths']['value'])
+            print(country + " deaths is: " + str(virusdata_country_deaths))
+            virusdata_country_updated = virusdata_country_json['lastUpdate']
+            print(country + " updated: " + virusdata_country_updated)
+            logging.info(virusdata_country_updated + ' ==> ' + country + ' confirmed: ' + str(virusdata_country_confirmed) + ', recovered: ' + str(virusdata_country_recovered) + ', deaths: ' + str(virusdata_country_deaths))
+            countries_data.append([country, virusdata_country_confirmed, virusdata_country_recovered, virusdata_country_updated])
+            print("Country array is " + str(countries_data))
+        else:
+            print("No " + country + " data: " + virusdata_country.text)
+            logging.info(country + '  ==> failed to get data')
+
+# Pull country data
+data_countries_pull()
 
 # Create Flask app to build site
 app = Flask(__name__)
@@ -79,7 +120,9 @@ app = Flask(__name__)
 @app.route('/')
 def root():
     logging.info(request.remote_addr + ' ==> Root page ')
-    return render_template('na.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, data_us_confirmed=data_us_confirmed, data_us_recovered=data_us_recovered, data_us_deaths=data_us_deaths, data_us_updated=data_us_updated)
+    data_world_pull()
+    data_countries_pull()
+    return render_template('main.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_recovered=virusdata_world_recovered, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_updated=virusdata_world_updated, countries_data=countries_data)
 
 # About page
 @app.route('/about')

@@ -26,22 +26,32 @@
     
             <div>
     
-                This page provides virus tracking information for US and Canada populations in North America.
+                This page provides virus tracking information for the world and select countries.
     
             </div>
     
             <div>
     
-                US Confirmed Cases: {{ data_us_confirmed }}<br>
-                US Recovered: {{ data_us_recovered }}<br>
-                US Deaths: {{ data_us_deaths }}<br>
-                Last Updated: {{ data_us_updated }}
+                World Confirmed Cases: {{ virusdata_world_confirmed }}<br>
+                World Recovered: {{ virusdata_world_recovered }}<br>
+                World Deaths: {{ virusdata_world_deaths }}<br>
+                Last Updated: {{ virusdata_world_updated }}
     
+            </div>
+
+
+            <div>
+            {% for country_data in countries_data %}
+
+            Data right here if this worked:
+            {{ country_data }}<br>
+
+            {% endfor %}
             </div>
 
             <div>
     
-                <h3>Contact us for questions at <a href="mailto: {{ email }}">Support</a></h3>
+                <h3>Contact for questions at <a href="mailto: {{ email }}">Support</a></h3>
     
             </div>
     
