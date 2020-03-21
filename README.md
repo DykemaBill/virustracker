@@ -25,3 +25,5 @@ Web application written in Python using Flask which provides a single root page 
 
 This Python Flask application uses [Muhammad Mustadi](https://mathdro.id)'s [COVID-19 JSON API](https://github.com/mathdroid/covid-19-api) to get data.
 Data comes from the [John Hopkins University](https://www.jhu.edu), it may not be used for commercial purposes.
+
+![virustracker_screenshot](https://github.com/DykemaBill/virustracker/blob/master/virustrackerSS.png)
