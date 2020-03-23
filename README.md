@@ -17,8 +17,8 @@ Web application written in Python using Flask which provides a single root page 
 - Change code to loop through locations from configuration file - DONE
 - Update HTML page to receive array of locations - DONE
 - Clean-up HTML page look and feel - DONE
-- Add additional links to external charts/graphs, possibly embed them - Next
-- Page auto refresh (not frequent) for those that might leave it open or use it in a kiosk
+- Add additional links to external charts/graphs, possibly embed them - DONE
+- Page auto refresh (not frequent) for those that might leave it open or use it in a kiosk - DONE
 - Log clean-up/archive
 - Look into direct OData access to Johns Hopkins University (likely separate project) for additional data
 

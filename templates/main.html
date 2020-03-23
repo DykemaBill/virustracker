@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="refresh" content="3600">
     <title>Virus Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styling.css') }}">
 </head>
 <body>
     <div class="wrapper">
 
+        <!-- Header area here -->
         <div class="header">
 
         <div>
@@ -49,8 +51,8 @@
             </div>
         </div>
 
-        <!-- Country data here -->
         {% for country_data in countries_data %}
+        <!-- {{ country_names[loop.index-1] }} data here -->
         <div class="title">
             <h1>{{ country_names[loop.index-1] }}</h1>
             <h5>Last updated (GMT): {{ country_data['virusdata_updated'] }}</h5>
@@ -70,6 +72,15 @@
             </div>
         </div>
         {% endfor %}
+
+        <!-- Embedded map here -->
+        <div class="title">
+            <h1>World Map</h1>
+        </div>
+        <div class="header">
+            <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" target="_blank"><iframe width="830" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="2019-nCoV" src="http://gisanddata.maps.arcgis.com/apps/Embed/index.html?webmap=14aa9e5660cf42b5b4b546dec6ceec7c&extent=-120,60,150,-40&zoom=true&previewImage=false"></iframe></a>
+            <h5>Credit: <a href="https://coronavirus.jhu.edu" target="_blank">Johns Hopkins Center for Systems Science and Engineering</a></h5>
+        </div>
 
         <div class="description">
 
