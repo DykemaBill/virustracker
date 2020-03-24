@@ -19,9 +19,9 @@ Web application written in Python using Flask which provides a single root page 
 - Clean-up HTML page look and feel - DONE
 - Add additional links to external charts/graphs, possibly embed them - DONE
 - Page auto refresh (not frequent) for those that might leave it open or use it in a kiosk - DONE
-- On data pull error, add message rather than just displaying a 0
-- Add favicon
-- Reduce KPI size for smaller displays
+- On data pull error, add message rather than just displaying a 0 - DONE
+- Add favicon - DONE
+- Reduce KPI size for smaller displays - DONE
 - Log clean-up/archive
 - Look into direct OData access to Johns Hopkins University (likely separate project) for additional data
 

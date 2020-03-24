@@ -7,6 +7,7 @@
     <meta http-equiv="refresh" content="3600">
     <title>Virus Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styling.css') }}">
+    <link rel="shortcut icon" media="all" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
     <div class="wrapper">
@@ -18,10 +19,10 @@
             <img src="{{ logo }}" style="width:150px;height:122px;">
         </div>
 
-            <H1>Virus Tracker</H1>
+            <h2>Virus Tracker</h2>
         
-            <h3><p>Date: <span id="datetime"></span></p>
-            <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
+            <h4><p>Date: <span id="datetime"></span></p>
+            <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h4>
 
         </div>
 
@@ -40,14 +41,35 @@
             <div class="kpi_yellow">
                 <p>Confirmed</p>
                 <h1>{{ virusdata_world_confirmed }}</h1>
+                {% if virusdata_world_confirmed_updated == False %}
+                <p class="kpi_error">not updated</p>
+                {% else %}
+                    {% if virusdata_world_confirmed == 0 %}
+                    <p class="kpi_error">data error</p>
+                    {% endif %}
+                {% endif %}
             </div>
             <div class="kpi_green">
                 <p>Recovered</p>
                 <h1>{{ virusdata_world_recovered }}</h1>
+                {% if virusdata_world_recovered_updated == False %}
+                <p class="kpi_error">not updated</p>
+                {% else %}
+                    {% if virusdata_world_recovered == 0 %}
+                    <p class="kpi_error">data error</p>
+                    {% endif %}
+                {% endif %}
             </div>
             <div class="kpi_red">
                 <p>Deaths</p>
                 <h1>{{ virusdata_world_deaths }}</h1>
+                {% if virusdata_world_deaths_updated == False %}
+                <p class="kpi_error">not updated</p>
+                {% else %}
+                    {% if virusdata_world_deaths == 0 %}
+                    <p class="kpi_error">data error</p>
+                    {% endif %}
+                {% endif %}
             </div>
         </div>
 
@@ -61,14 +83,23 @@
             <div class="kpi_yellow">
                 <p>Confirmed</p>
                 <h1>{{ country_data['virusdata_confirmed']['value'] }}</h1>
+                {% if country_data['virusdata_confirmed']['value'] == 0 %}
+                <p class="kpi_error">possible data error</p>
+                {% endif %}
             </div>
             <div class="kpi_green">
                 <p>Recovered</p>
                 <h1>{{ country_data['virusdata_recovered']['value'] }}</h1>
+                {% if country_data['virusdata_recovered']['value'] == 0 %}
+                <p class="kpi_error">possible data error</p>
+                {% endif %}
             </div>
             <div class="kpi_red">
                 <p>Deaths</p>
                 <h1>{{ country_data['virusdata_deaths']['value'] }}</h1>
+                {% if country_data['virusdata_deaths']['value'] == 0 %}
+                <p class="kpi_error">possible data error</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
@@ -78,13 +109,13 @@
             <h1>World Map</h1>
         </div>
         <div class="header">
-            <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" target="_blank"><iframe width="830" height="400" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="2019-nCoV" src="http://gisanddata.maps.arcgis.com/apps/Embed/index.html?webmap=14aa9e5660cf42b5b4b546dec6ceec7c&extent=-120,60,150,-40&zoom=true&previewImage=false"></iframe></a>
+            <a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6" target="_blank"><iframe width="660" height="300" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" title="2019-nCoV" src="http://gisanddata.maps.arcgis.com/apps/Embed/index.html?webmap=14aa9e5660cf42b5b4b546dec6ceec7c&extent=-170,75,170,-60&zoom=true&previewImage=false"></iframe></a>
             <h5>Credit: <a href="https://coronavirus.jhu.edu" target="_blank">Johns Hopkins Center for Systems Science and Engineering</a></h5>
         </div>
 
         <div class="description">
 
-            <h3>Information <a href="about">about</a> this page</h3>
+            <h4>Information <a href="about">about</a> this page</h4>
 
         </div>
 

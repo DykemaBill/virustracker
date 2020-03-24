@@ -1,5 +1,5 @@
 from flask import Flask, render_template, json, request
-import requests, logging, time
+import requests, logging, time, os
 
 # Setup logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO, filename='virustracker.log')
@@ -48,8 +48,11 @@ config_file_read()
 
 # Data variables
 virusdata_world_confirmed = 0
+virusdata_world_confirmed_updated = False
 virusdata_world_recovered = 0
+virusdata_world_recovered_updated = False
 virusdata_world_deaths = 0
+virusdata_world_deaths_updated = False
 virusdata_world_updated = ""
 
 # Function to pull data
@@ -61,18 +64,55 @@ def data_world_pull():
         print("Got entire world data: " + virusdata_world.text)
         virusdata_world_json = virusdata_world.json()
         global virusdata_world_confirmed
+        global virusdata_world_confirmed_updated
         global virusdata_world_recovered
+        global virusdata_world_recovered_updated
         global virusdata_world_deaths
+        global virusdata_world_deaths_updated
         global virusdata_world_updated
-        virusdata_world_confirmed = int(virusdata_world_json['confirmed']['value'])
+
+        # Get new confirmed value
+        virusdata_world_confirmed_new = int(virusdata_world_json['confirmed']['value'])
+        # Check to see if new value is greater
+        if virusdata_world_confirmed_new < virusdata_world_confirmed:
+            # Since it is not greater, it could be bad data
+            virusdata_world_confirmed_updated = False
+        else:
+            # Since it is greater, use it
+            virusdata_world_confirmed = virusdata_world_confirmed_new
+            virusdata_world_confirmed_updated = True
         print("World confirmed is: " + str(virusdata_world_confirmed))
-        virusdata_world_recovered = int(virusdata_world_json['recovered']['value'])
+
+        # Get new recovered value
+        virusdata_world_recovered_new = int(virusdata_world_json['recovered']['value'])
+        # Check to see if new value is greater
+        if virusdata_world_recovered_new < virusdata_world_recovered:
+            # Since it is not greater, it could be bad data
+            virusdata_world_recovered_updated = False
+        else:
+            # Since it is greater, use it
+            virusdata_world_recovered = virusdata_world_recovered_new
+            virusdata_world_recovered_updated = True
         print("World recovered is: " + str(virusdata_world_recovered))
-        virusdata_world_deaths = int(virusdata_world_json['deaths']['value'])
+
+        # Get new deaths value
+        virusdata_world_deaths_new = int(virusdata_world_json['deaths']['value'])
+        # Check to see if new value is greater
+        if virusdata_world_deaths_new < virusdata_world_deaths:
+            # Since it is not greater, it could be bad data
+            virusdata_world_deaths_updated = False
+        else:
+            # Since it is greater, use it
+            virusdata_world_deaths = virusdata_world_deaths_new
+            virusdata_world_deaths_updated = True
         print("World deaths is: " + str(virusdata_world_deaths))
+
+        # Get new last updated value
         virusdata_world_updated = virusdata_world_json['lastUpdate']
         print("Updated: " + virusdata_world_updated)
-        logging.info(virusdata_world_updated + ' ==> World confirmed: ' + str(virusdata_world_confirmed) + ', recovered: ' + str(virusdata_world_recovered) + ', deaths: ' + str(virusdata_world_deaths))
+
+        # Log new values
+        logging.info(virusdata_world_updated + ' ==> World confirmed: ' + str(virusdata_world_confirmed_new) + ', recovered: ' + str(virusdata_world_recovered_new) + ', deaths: ' + str(virusdata_world_deaths_new))
     else:
         print("No world data: " + virusdata_world.text)
         logging.info('World  ==> failed to get data')
@@ -102,14 +142,24 @@ def data_countries_pull():
         if virusdata_country.status_code == 200:
             print("Got " + country + " data: " + virusdata_country.text)
             virusdata_country_json = virusdata_country.json()
+
+            # Get new confirmed value
             virusdata_country_confirmed = int(virusdata_country_json['confirmed']['value'])
             print(country + " confirmed is: " + str(virusdata_country_confirmed))
+
+            # Get new recovered value
             virusdata_country_recovered = int(virusdata_country_json['recovered']['value'])
             print(country + " recovered is: " + str(virusdata_country_recovered))
+
+            # Get new deaths value
             virusdata_country_deaths = int(virusdata_country_json['deaths']['value'])
             print(country + " deaths is: " + str(virusdata_country_deaths))
+
+            # Get new last updated value
             virusdata_country_updated = virusdata_country_json['lastUpdate']
             print(country + " updated: " + virusdata_country_updated)
+
+            # Log new values
             logging.info(virusdata_country_updated + ' ==> ' + country + ' confirmed: ' + str(virusdata_country_confirmed) + ', recovered: ' + str(virusdata_country_recovered) + ', deaths: ' + str(virusdata_country_deaths))
             countries_data.append(JSONtoArray(**virusdata_country_json)) # Using this to make it easier to use with Jinja
         else:
@@ -128,7 +178,7 @@ def root():
     logging.info(request.remote_addr + ' ==> Root page ')
     data_world_pull()
     data_countries_pull()
-    return render_template('main.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_recovered=virusdata_world_recovered, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data)
+    return render_template('main.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data)
 
 # About page
 @app.route('/about')

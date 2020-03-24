@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Virus Tracker</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styling.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon" media="all" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
     <div class="wrapper">
@@ -16,10 +18,10 @@
             <img src="{{ logo }}" style="width:150px;height:122px;">
         </div>
 
-            <H1>NOTICE</H1>
+            <h2>NOTICE</h2>
                 
-            <h3><p>Date: <span id="datetime"></span></p>
-            <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h3>
+            <h4><p>Date: <span id="datetime"></span></p>
+            <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h4>
 
         </div>
 
@@ -33,7 +35,7 @@
 
         <div class="description">
 
-            <h3>Information <a href="about">about</a> this page</h3>
+            <h4>Information <a href="about">about</a> this page</h4>
 
         </div>
 
