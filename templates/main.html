@@ -33,12 +33,12 @@
         </div>
 
         <!-- World data here -->
-        <div class="title">
-            <h1>World</h1>
-            <h5>Last Updated (GMT): {{ virusdata_world_updated }}</h5>
-        </div>
         <div class="kpis">
-            <div class="kpi_yellow">
+            <div class="kpititle">
+                <h1>World</h1>
+                <h5>Last Updated (GMT):<br>{{ virusdata_world_updated }}</h5>
+            </div>
+            <div class="kpi kpi_yellow">
                 <p>Confirmed</p>
                 <h1>{{ virusdata_world_confirmed }}</h1>
                 {% if virusdata_world_confirmed_updated == False %}
@@ -49,7 +49,7 @@
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="kpi_green">
+            <div class="kpi kpi_green">
                 <p>Recovered</p>
                 <h1>{{ virusdata_world_recovered }}</h1>
                 {% if virusdata_world_recovered_updated == False %}
@@ -60,7 +60,7 @@
                     {% endif %}
                 {% endif %}
             </div>
-            <div class="kpi_red">
+            <div class="kpi kpi_red">
                 <p>Deaths</p>
                 <h1>{{ virusdata_world_deaths }}</h1>
                 {% if virusdata_world_deaths_updated == False %}
@@ -75,26 +75,26 @@
 
         {% for country_data in countries_data %}
         <!-- {{ country_names[loop.index-1] }} data here -->
-        <div class="title">
-            <h1>{{ country_names[loop.index-1] }}</h1>
-            <h5>Last updated (GMT): {{ country_data['virusdata_updated'] }}</h5>
-        </div>
         <div class="kpis">
-            <div class="kpi_yellow">
+            <div class="kpititle">
+                <h1>{{ country_names[loop.index-1] }}</h1>
+                <h5>Last updated (GMT):<br>{{ country_data['virusdata_updated'] }}</h5>
+            </div>
+            <div class="kpi kpi_yellow">
                 <p>Confirmed</p>
                 <h1>{{ country_data['virusdata_confirmed']['value'] }}</h1>
                 {% if country_data['virusdata_confirmed']['value'] == 0 %}
                 <p class="kpi_error">possible data error</p>
                 {% endif %}
             </div>
-            <div class="kpi_green">
+            <div class="kpi kpi_green">
                 <p>Recovered</p>
                 <h1>{{ country_data['virusdata_recovered']['value'] }}</h1>
                 {% if country_data['virusdata_recovered']['value'] == 0 %}
                 <p class="kpi_error">possible data error</p>
                 {% endif %}
             </div>
-            <div class="kpi_red">
+            <div class="kpi kpi_red">
                 <p>Deaths</p>
                 <h1>{{ country_data['virusdata_deaths']['value'] }}</h1>
                 {% if country_data['virusdata_deaths']['value'] == 0 %}
@@ -105,7 +105,7 @@
         {% endfor %}
 
         <!-- Embedded map here -->
-        <div class="title">
+        <div class="description">
             <h1>World Map</h1>
         </div>
         <div class="header">

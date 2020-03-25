@@ -21,20 +21,18 @@
   padding: 1em;
   text-align: center;
 }
-.title{
-  text-align: center;
-  grid-gap: 1px;
-  padding: 1px;
-}
 .kpis{
   display:grid;
   background:#eee;
-  grid-template-columns:repeat(3, 1fr);
+  grid-template-columns:repeat(4, 1fr);
   padding-top: .5em;
   padding-bottom: .5em;
   text-align: center;
 }
-.kpis > div{
+.kpititle > h1{
+  color: blue;
+}
+.kpi{
   border:#333 1px solid;
   text-align: center;
   font-size: 120%;
@@ -44,7 +42,7 @@
   margin-left: auto;
   margin-right: auto;
 }
-.kpis > div > h1{
+.kpi > h1{
   font-family: "Courier New";
 }
 .kpi_error{
