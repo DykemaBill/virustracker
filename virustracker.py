@@ -8,8 +8,8 @@ logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO, file
 logging.info('****====****====****====****====****==== Starting up ====****====****====****====****====****')
 
 # Configuration file name
-config_file = 'config'
-logging.info('Reading config file ' + config_file + '.json')
+config_file = 'virustracker'
+logging.info('Reading config file ' + config_file + '.cfg')
 
 # Read configuration variables
 virustracker_logo = ""
@@ -23,7 +23,7 @@ def config_file_read():
     global countries_config
     countries_config.clear()
     try:
-        with open(config_file + '.json', 'r') as json_file:
+        with open(config_file + '.cfg', 'r') as json_file:
             json_data = json.loads(json_file.read())
             global virustracker_logo
             global virustracker_email
@@ -38,8 +38,8 @@ def config_file_read():
                 countries_config.append(country)
             logging.info('Countries to display: ' + str(countries_config))
     except IOError:
-        print('Problem opening ' + config_file + '.json, check to make sure your configuration file is not missing.')
-        logging.info('Problem opening ' + config_file + '.json, check to make sure your configuration file is not missing.')
+        print('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
+        logging.info('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
         global config_error
         config_error = True
 
