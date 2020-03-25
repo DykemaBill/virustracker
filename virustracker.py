@@ -13,6 +13,7 @@ logging.info('Reading config file ' + config_file + '.cfg')
 
 # Read configuration variables
 virustracker_logo = ""
+virustracker_logosize = []
 virustracker_email = ""
 virustracker_apiroot = ""
 
@@ -26,10 +27,14 @@ def config_file_read():
         with open(config_file + '.cfg', 'r') as json_file:
             json_data = json.loads(json_file.read())
             global virustracker_logo
+            global virustracker_logosize
             global virustracker_email
             global virustracker_apiroot
             virustracker_logo = json_data['logo']
             logging.info('Logo is set to: ' + virustracker_logo)
+            virustracker_logosize.append(json_data['logosize'][0])
+            virustracker_logosize.append(json_data['logosize'][1])
+            logging.info('Logo size is set to: ' + str(virustracker_logosize[0]) + ', ' + str(virustracker_logosize[1]))
             virustracker_apiroot = json_data['apiroot']
             logging.info('API path root is set to: ' + virustracker_apiroot)
             virustracker_email = json_data['email']
@@ -178,19 +183,19 @@ def root():
     logging.info(request.remote_addr + ' ==> Root page ')
     data_world_pull()
     data_countries_pull()
-    return render_template('main.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data)
+    return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data)
 
 # About page
 @app.route('/about')
 def about():
     logging.info(request.remote_addr + ' ==> About page ')
-    return render_template('about.html', logo=virustracker_logo, apiroot=virustracker_apiroot, email=virustracker_email)
+    return render_template('about.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email)
 
 # Maintenance template page
 @app.route('/maint')
 def maint():
     logging.info(request.remote_addr + ' ==> Maintenance page ')
-    return render_template('maintenance.html', logo=virustracker_logo, email=virustracker_email)
+    return render_template('maintenance.html', logo=virustracker_logo, logosize=virustracker_logosize, email=virustracker_email)
 
 # Run in debug mode if started from CLI
 if __name__ == '__main__':
