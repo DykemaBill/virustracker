@@ -25,7 +25,6 @@ Web application written in Python using Flask which provides a single root page 
 - Rename configuration file to match application name - DONE
 - Add logo size to configuration file - DONE
 - Move world and country titles to the lefthand area to make more room to add cities/provinces - DONE
-- Country API deprecated, switch to https://covid19.mathdro.id/api/confirmed
 - Add cities/provinces to configuration file and display under countries
 - Log clean-up/archive
 - Look into direct OData access to Johns Hopkins University, likely separate project

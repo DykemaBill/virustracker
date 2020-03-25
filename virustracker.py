@@ -20,9 +20,12 @@ virustracker_apiroot = ""
 # Function to read configuration file
 config_error = False
 countries_config = []
+regions_config = []
 def config_file_read():
     global countries_config
     countries_config.clear()
+    global regions_config
+    regions_config.clear()
     try:
         with open(config_file + '.cfg', 'r') as json_file:
             json_data = json.loads(json_file.read())
@@ -40,8 +43,11 @@ def config_file_read():
             virustracker_email = json_data['email']
             logging.info('Email is set to: ' + virustracker_email)
             for country in json_data['countries']:
-                countries_config.append(country)
+                countries_config.append(country['iso3'])
             logging.info('Countries to display: ' + str(countries_config))
+            for region in json_data['countries']:
+                regions_config.append(region['regions'])
+            logging.info('Regions to display: ' + str(regions_config))
     except IOError:
         print('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
         logging.info('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
@@ -173,6 +179,55 @@ def data_countries_pull():
 
 # Pull country data
 data_countries_pull()
+
+
+# Data variables
+regions_data = []
+
+# Function to pull regions data
+def data_regions_pull():
+    # Get updated data for countries
+    pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
+    global regions_data
+    regions_data.clear()
+
+    virusdata_regions = requests.get(virustracker_apiroot + "/confirmed")
+    if virusdata_regions.status_code == 200:
+        virusdata_regions_json = virusdata_regions.json()
+        for country_regions in regions_config:
+            for region in country_regions:
+            
+                print ("Will need to get data for " + region + " here from virusdata_regions_json")
+
+                # LEFT OFF HERE, NEED TO PARSE DATA FOR INDIVIDUAL REGIONS
+                #virusdata_region_data = virusdata_regions_json['combinedKey'][region]
+
+                # Get new confirmed value
+                #virusdata_region_confirmed = int(virusdata_regions_json['combinedKey'][region])
+                #print(region + " confirmed is: " + str(virusdata_region_confirmed))
+
+                # Get new recovered value
+                #virusdata_region_recovered = int(virusdata_regions_json['recovered']['value'])
+                #print(region + " recovered is: " + str(virusdata_region_recovered))
+
+                # Get new deaths value
+                #virusdata_region_deaths = int(virusdata_regions_json['deaths']['value'])
+                #print(region + " deaths is: " + str(virusdata_region_deaths))
+
+                # Get new last updated value
+                #virusdata_region_updated = virusdata_regions_json['lastUpdate']
+                #print(region + " updated: " + virusdata_region_updated)
+
+                # Log new values
+                #logging.info(virusdata_region_updated + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
+                #regions_data.append(JSONtoArray(**virusdata_regions_json)) # Using this to make it easier to use with Jinja
+    else:
+        print("No regions data: " + virusdata_regions.text)
+        logging.info('Regions  ==> failed to get data')
+
+# Pull country data
+data_regions_pull()
+
 
 # Create Flask app to build site
 app = Flask(__name__)
