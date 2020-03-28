@@ -132,7 +132,7 @@ def data_world_pull():
 data_world_pull()
 
 # Class to collect array and then pass to HTML page
-class JSONtoArray:
+class CountryJSONtoArray:
     def __init__(self, confirmed, recovered, deaths, lastUpdate):
         self.virusdata_confirmed = confirmed
         self.virusdata_recovered = recovered
@@ -172,7 +172,7 @@ def data_countries_pull():
 
             # Log new values
             logging.info(virusdata_country_updated + ' ==> ' + country + ' confirmed: ' + str(virusdata_country_confirmed) + ', recovered: ' + str(virusdata_country_recovered) + ', deaths: ' + str(virusdata_country_deaths))
-            countries_data.append(JSONtoArray(**virusdata_country_json)) # Using this to make it easier to use with Jinja
+            countries_data.append(CountryJSONtoArray(**virusdata_country_json)) # Using this to make it easier to use with Jinja
         else:
             print("No " + country + " data: " + virusdata_country.text)
             logging.info(country + '  ==> failed to get data')
@@ -180,6 +180,15 @@ def data_countries_pull():
 # Pull country data
 data_countries_pull()
 
+# Class to collect array and then pass to HTML page
+class RegionJSONtoArray:
+    def __init__(self, provinceState, countryRegion, lastUpdate, lat, long, confirmed, recovered, deaths, active, admin2, fips, combinedKey, incidentRate, peopleTested, iso2, iso3):
+        self.virusdata_country = iso3
+        self.virusdata_region = combinedKey
+        self.virusdata_confirmed = confirmed
+        self.virusdata_recovered = recovered
+        self.virusdata_deaths = deaths
+        self.virusdata_updated = lastUpdate
 
 # Data variables
 regions_data = []
@@ -232,14 +241,13 @@ def data_regions_pull():
 
                         # Log new values
                         logging.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
-                        #regions_data.append(JSONtoArray(**virusdata_regions_json)) # Using this to make it easier to use with Jinja
+                        regions_data.append(RegionJSONtoArray(**country_regions_item)) # Using this to make it easier to use with Jinja
     else:
         print("No regions data: " + virusdata_regions.text)
         logging.info('Regions  ==> failed to get data')
 
 # Pull country data
 data_regions_pull()
-
 
 # Create Flask app to build site
 app = Flask(__name__)
@@ -250,7 +258,8 @@ def root():
     logging.info(request.remote_addr + ' ==> Root page ')
     data_world_pull()
     data_countries_pull()
-    return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data)
+    data_regions_pull()
+    return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_data=regions_data)
 
 # About page
 @app.route('/about')
