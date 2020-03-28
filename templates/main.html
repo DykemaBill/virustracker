@@ -42,10 +42,10 @@
                 <p>Confirmed</p>
                 <h1>{{ virusdata_world_confirmed }}</h1>
                 {% if virusdata_world_confirmed_updated == False %}
-                <p class="kpi_error">not updated</p>
+                    <p class="kpi_error">not updated</p>
                 {% else %}
                     {% if virusdata_world_confirmed == 0 %}
-                    <p class="kpi_error">data error</p>
+                        <p class="kpi_error">data error</p>
                     {% endif %}
                 {% endif %}
             </div>
@@ -53,10 +53,10 @@
                 <p>Recovered</p>
                 <h1>{{ virusdata_world_recovered }}</h1>
                 {% if virusdata_world_recovered_updated == False %}
-                <p class="kpi_error">not updated</p>
+                    <p class="kpi_error">not updated</p>
                 {% else %}
                     {% if virusdata_world_recovered == 0 %}
-                    <p class="kpi_error">data error</p>
+                        <p class="kpi_error">data error</p>
                     {% endif %}
                 {% endif %}
             </div>
@@ -64,17 +64,17 @@
                 <p>Deaths</p>
                 <h1>{{ virusdata_world_deaths }}</h1>
                 {% if virusdata_world_deaths_updated == False %}
-                <p class="kpi_error">not updated</p>
+                    <p class="kpi_error">not updated</p>
                 {% else %}
                     {% if virusdata_world_deaths == 0 %}
-                    <p class="kpi_error">data error</p>
+                        <p class="kpi_error">data error</p>
                     {% endif %}
                 {% endif %}
             </div>
         </div>
-
         {% for country_data in countries_data %}
-        <!-- {{ country_names[loop.index-1] }} data here -->
+        {% set country = country_names[loop.index-1] %}
+        <!-- {{ country }} data here -->
         <div class="kpis">
             <div class="kpititle">
                 <h1>{{ country_names[loop.index-1] }}</h1>
@@ -84,24 +84,43 @@
                 <p>Confirmed</p>
                 <h1>{{ country_data['virusdata_confirmed']['value'] }}</h1>
                 {% if country_data['virusdata_confirmed']['value'] == 0 %}
-                <p class="kpi_error">possible data error</p>
+                    <p class="kpi_error">possible data error</p>
                 {% endif %}
             </div>
             <div class="kpi kpi_green">
                 <p>Recovered</p>
                 <h1>{{ country_data['virusdata_recovered']['value'] }}</h1>
                 {% if country_data['virusdata_recovered']['value'] == 0 %}
-                <p class="kpi_error">possible data error</p>
+                    <p class="kpi_error">possible data error</p>
                 {% endif %}
             </div>
             <div class="kpi kpi_red">
                 <p>Deaths</p>
                 <h1>{{ country_data['virusdata_deaths']['value'] }}</h1>
                 {% if country_data['virusdata_deaths']['value'] == 0 %}
-                <p class="kpi_error">possible data error</p>
+                    <p class="kpi_error">possible data error</p>
                 {% endif %}
             </div>
         </div>
+            {% for region_data in regions_data %}
+                {% if region_data['virusdata_country'] == country %}
+                    <!-- {{ country }}, {{ region_data['virusdata_region'] }} data here -->
+                    <div class="kpis">
+                        <div class="regtitle">
+                            <h4>{{ region_data['virusdata_region'] }}</h4>
+                        </div>
+                        <div class="kpiregion kpi_yellow">
+                            <h1>{{ region_data['virusdata_confirmed'] }}</h1>
+                        </div>
+                        <div class="kpiregion kpi_green">
+                            <h1>{{ region_data['virusdata_recovered'] }}</h1>
+                        </div>
+                        <div class="kpiregion kpi_red">
+                            <h1>{{ region_data['virusdata_deaths'] }}</h1>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
 
         <!-- Embedded map here -->

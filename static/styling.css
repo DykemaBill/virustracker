@@ -32,6 +32,10 @@
 .kpititle > h1{
   color: blue;
 }
+.regtitle{
+  padding: .1em;
+  text-align: right;
+}
 .kpi{
   border:#333 1px solid;
   text-align: center;
@@ -43,6 +47,18 @@
   margin-right: auto;
 }
 .kpi > h1{
+  font-family: "Courier New";
+}
+.kpiregion{
+  border:#333 1px solid;
+  text-align: center;
+  font-size: 75%;
+  width: 160px;
+  padding: .2em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.kpiregion > h1{
   font-family: "Courier New";
 }
 .kpi_error{
