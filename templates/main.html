@@ -10,6 +10,9 @@
     <link rel="shortcut icon" media="all" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
+
+    <script src="{{ url_for('static', filename='expand.js') }}"></script>
+
     <div class="wrapper">
 
         <!-- Header area here -->
@@ -72,6 +75,7 @@
                 {% endif %}
             </div>
         </div>
+        <label class="expand_control">&#176; &#176; &#176;</label>
         {% for country_data in countries_data %}
         {% set country = country_names[loop.index-1] %}
         <!-- {{ country }} data here -->
@@ -102,6 +106,9 @@
                 {% endif %}
             </div>
         </div>
+        <!-- <button type="button" class="collapsible" onclick="clicked(this)">Open Collapsible</button> -->
+        <label class="expand_control" onclick="onClicked(this)">&#8227; &#8227; &#8227;</label>
+        <div class="expand_content">
             {% for region_data in regions_data %}
                 {% if region_data['virusdata_country'] == country %}
                     <!-- {{ country }}, {{ region_data['virusdata_region'] }} data here -->
@@ -121,6 +128,8 @@
                     </div>
                 {% endif %}
             {% endfor %}
+        </div>
+        <label class="expand_content expand_control">&#176; &#176; &#176;</label>
         {% endfor %}
 
         <!-- Embedded map here -->
@@ -139,5 +148,6 @@
         </div>
 
     </div>
+
 </body>
 </html>

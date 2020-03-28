@@ -1,3 +1,4 @@
+/* Page styling */
 .wrapper{
   display:grid;
   grid-template-columns: 100%;
@@ -21,6 +22,8 @@
   padding: 1em;
   text-align: center;
 }
+
+/* KPI grid styling */
 .kpis{
   display:grid;
   background:#eee;
@@ -29,12 +32,10 @@
   padding-bottom: .5em;
   text-align: center;
 }
+
+/* KPI world styling */
 .kpititle > h1{
   color: blue;
-}
-.regtitle{
-  padding: .1em;
-  text-align: right;
 }
 .kpi{
   border:#333 1px solid;
@@ -49,6 +50,12 @@
 .kpi > h1{
   font-family: "Courier New";
 }
+
+/* KPI region styling */
+.regtitle{
+  padding: .1em;
+  text-align: right;
+}
 .kpiregion{
   border:#333 1px solid;
   text-align: center;
@@ -61,6 +68,8 @@
 .kpiregion > h1{
   font-family: "Courier New";
 }
+
+/* KPI colors */
 .kpi_error{
   font-family: "Courier New";
   font-size: 50%;
@@ -76,4 +85,19 @@
 .kpi_red{
   background-color: red;
   color: white;
+}
+
+/* Item used to open and close the collapsible content */
+.expand_control {
+  background-color: #eee;
+  color: #444;
+}
+.active, .collapsible:hover {
+  background-color: #ddd;
+}
+
+/* Expandable content */
+.expand_content {
+  display: none;
+  overflow: hidden;
 }
