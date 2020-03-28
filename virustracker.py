@@ -191,36 +191,48 @@ def data_regions_pull():
     global regions_data
     regions_data.clear()
 
+    # Get confirmed data for all regions
     virusdata_regions = requests.get(virustracker_apiroot + "/confirmed")
     if virusdata_regions.status_code == 200:
         virusdata_regions_json = virusdata_regions.json()
         for country_regions in regions_config:
+            # Iterate through each region from the country region list
             for region in country_regions:
             
-                print ("Will need to get data for " + region + " here from virusdata_regions_json")
+                #print ("Will need to get data for " + region + " here from virusdata_regions_json")
 
-                # LEFT OFF HERE, NEED TO PARSE DATA FOR INDIVIDUAL REGIONS
-                #virusdata_region_data = virusdata_regions_json['combinedKey'][region]
+                for country_regions_item in virusdata_regions_json:
+                    #print ("Length of this list is: " + str(len(country_regions_item)))
+                    #print ("Item is " + country_regions_item['combinedKey'])
+                    # Look for region and get values for it
+                    if country_regions_item['combinedKey'] == region:
+                        #print ("Found it: " + str(country_regions_item))
 
-                # Get new confirmed value
-                #virusdata_region_confirmed = int(virusdata_regions_json['combinedKey'][region])
-                #print(region + " confirmed is: " + str(virusdata_region_confirmed))
+                        # Get new confirmed value
+                        virusdata_region_confirmed = int(country_regions_item['confirmed'])
+                        print(region + " confirmed is: " + str(virusdata_region_confirmed))
 
-                # Get new recovered value
-                #virusdata_region_recovered = int(virusdata_regions_json['recovered']['value'])
-                #print(region + " recovered is: " + str(virusdata_region_recovered))
+                        # Get new recovered value
+                        virusdata_region_recovered = int(country_regions_item['recovered'])
+                        print(region + " recovered is: " + str(virusdata_region_recovered))
 
-                # Get new deaths value
-                #virusdata_region_deaths = int(virusdata_regions_json['deaths']['value'])
-                #print(region + " deaths is: " + str(virusdata_region_deaths))
+                        # Get new deaths value
+                        virusdata_region_deaths = int(country_regions_item['deaths'])
+                        print(region + " deaths is: " + str(virusdata_region_deaths))
 
-                # Get new last updated value
-                #virusdata_region_updated = virusdata_regions_json['lastUpdate']
-                #print(region + " updated: " + virusdata_region_updated)
+                        # Get latitude and longitude
+                        virusdata_region_gis = []
+                        virusdata_region_gis.append(float(country_regions_item['lat']))
+                        virusdata_region_gis.append(float(country_regions_item['long']))
+                        print(region + " GIS point is: " + str(virusdata_region_gis))
 
-                # Log new values
-                #logging.info(virusdata_region_updated + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
-                #regions_data.append(JSONtoArray(**virusdata_regions_json)) # Using this to make it easier to use with Jinja
+                        # Get new last updated value
+                        virusdata_region_updated = int(country_regions_item['lastUpdate'])
+                        print(region + " updated: " + str(virusdata_region_updated))
+
+                        # Log new values
+                        logging.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
+                        #regions_data.append(JSONtoArray(**virusdata_regions_json)) # Using this to make it easier to use with Jinja
     else:
         print("No regions data: " + virusdata_regions.text)
         logging.info('Regions  ==> failed to get data')
