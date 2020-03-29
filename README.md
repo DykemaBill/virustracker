@@ -27,6 +27,8 @@ Web application written in Python using Flask which provides a single root page 
 - Move world and country titles to the lefthand area to make more room to add cities/provinces - DONE
 - Add cities/provinces to configuration file and display under countries - DONE
 - Change regions to hide by default in the page - DONE
+- Add page refresh time to configuration
+- Add country maps and remove embedded world map
 - Add filter by state option
 - Log clean-up/archive
 - Look into direct OData access to Johns Hopkins University, likely separate project
