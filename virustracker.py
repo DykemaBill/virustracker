@@ -208,14 +208,16 @@ def data_regions_pull():
             # Iterate through each region from the country region list
             for region in country_regions:
             
-                #print ("Will need to get data for " + region + " here from virusdata_regions_json")
+                # Assume current region will not be found
+                region_found = False
 
                 for country_regions_item in virusdata_regions_json:
-                    #print ("Length of this list is: " + str(len(country_regions_item)))
-                    #print ("Item is " + country_regions_item['combinedKey'])
+
                     # Look for region and get values for it
                     if country_regions_item['combinedKey'] == region:
-                        #print ("Found it: " + str(country_regions_item))
+
+                        # Found data for current region
+                        region_found = True
 
                         # Get new confirmed value
                         virusdata_region_confirmed = int(country_regions_item['confirmed'])
@@ -242,6 +244,10 @@ def data_regions_pull():
                         # Log new values
                         logging.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
                         regions_data.append(RegionJSONtoArray(**country_regions_item)) # Using this to make it easier to use with Jinja
+
+                if region_found == False:
+                    print("No region data for: " + region)
+                    logging.info(region + ' no data')
     else:
         print("No regions data: " + virusdata_regions.text)
         logging.info('Regions  ==> failed to get data')
