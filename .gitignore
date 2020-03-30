@@ -1,4 +1,5 @@
 *.log
+*.log.*
 *_backup.*
 *_old.*
 .DS_Store

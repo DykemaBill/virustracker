@@ -1,21 +1,15 @@
-from flask import Flask, render_template, json, request
-import requests, logging, time, os
-
-# Setup logging
-logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO, filename='virustracker.log')
-
-# Starting up
-logging.info('****====****====****====****====****==== Starting up ====****====****====****====****====****')
+from flask import Flask, render_template, json, request, redirect, url_for
+import requests, logging, logging.handlers, time, numbers, os
 
 # Configuration file name
 config_file = 'virustracker'
-logging.info('Reading config file ' + config_file + '.cfg')
 
-# Read configuration variables
-virustracker_logo = ""
-virustracker_logosize = []
-virustracker_email = ""
-virustracker_apiroot = ""
+# Set default configuration variables
+virustracker_email = "needtosetinconfig@nowhere.com"
+virustracker_logo = "needtosetinconfig"
+virustracker_logosize = [ 100, 100 ]
+virustracker_logfilesize = [ 10000, 9 ]
+virustracker_apiroot = "https://needtosetinconfig/api"
 
 # Function to read configuration file
 config_error = False
@@ -29,33 +23,62 @@ def config_file_read():
     try:
         with open(config_file + '.cfg', 'r') as json_file:
             json_data = json.loads(json_file.read())
+            global virustracker_email
             global virustracker_logo
             global virustracker_logosize
-            global virustracker_email
+            global virustracker_logfilesize
             global virustracker_apiroot
+            virustracker_logfilesize.clear()
+            virustracker_logfilesize.append(json_data['logfilesize'][0])
+            virustracker_logfilesize.append(json_data['logfilesize'][1])
+            virustracker_email = json_data['email']
             virustracker_logo = json_data['logo']
-            logging.info('Logo is set to: ' + virustracker_logo)
+            virustracker_logosize.clear()
             virustracker_logosize.append(json_data['logosize'][0])
             virustracker_logosize.append(json_data['logosize'][1])
-            logging.info('Logo size is set to: ' + str(virustracker_logosize[0]) + ', ' + str(virustracker_logosize[1]))
             virustracker_apiroot = json_data['apiroot']
-            logging.info('API path root is set to: ' + virustracker_apiroot)
-            virustracker_email = json_data['email']
-            logging.info('Email is set to: ' + virustracker_email)
             for country in json_data['countries']:
                 countries_config.append(country['iso3'])
-            logging.info('Countries to display: ' + str(countries_config))
             for region in json_data['countries']:
                 regions_config.append(region['regions'])
-            logging.info('Regions to display: ' + str(regions_config))
     except IOError:
         print('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
-        logging.info('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
         global config_error
         config_error = True
 
 # Read configuration file
 config_file_read()
+
+# Set log name
+log_file = 'virustracker.log'
+# Start logger with desired output level
+logger = logging.getLogger('Logger')
+logger.setLevel(logging.INFO)
+# Setup log handler to manage size and total copies
+handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=virustracker_logfilesize[0], backupCount=virustracker_logfilesize[1])
+# Setup formatter to prefix each entry with date/time 
+formatter = logging.Formatter("%(asctime)s - %(message)s")
+# Add formatter
+handler.setFormatter(formatter)
+# Add handler
+logger.addHandler(handler)
+
+# Starting up
+logger.info('****====****====****====****====****==== Starting up ====****====****====****====****====****')
+
+# Config file status
+if config_error == True:
+    print ("Unable to read config")
+    logger.info('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
+else:
+    print ("Configuration file read")
+    logger.info('Log file size is set to ' + str(virustracker_logfilesize[0]) + ' bytes and ' + str(virustracker_logfilesize[1]) + ' copies')
+    logger.info('Email is set to: ' + virustracker_email)
+    logger.info('Logo is set to: ' + virustracker_logo)
+    logger.info('Logo size is set to: ' + str(virustracker_logosize[0]) + ', ' + str(virustracker_logosize[1]))
+    logger.info('API path root is set to: ' + virustracker_apiroot)
+    logger.info('Countries to display: ' + str(countries_config))
+    logger.info('Regions to display: ' + str(regions_config))
 
 # Data variables
 virusdata_world_confirmed = 0
@@ -69,7 +92,6 @@ virusdata_world_updated = ""
 # Function to pull data
 def data_world_pull():
     # Get updated data for entire world
-    pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
     virusdata_world = requests.get(virustracker_apiroot)
     if virusdata_world.status_code == 200:
         print("Got entire world data: " + virusdata_world.text)
@@ -123,13 +145,14 @@ def data_world_pull():
         print("Updated: " + virusdata_world_updated)
 
         # Log new values
-        logging.info(virusdata_world_updated + ' ==> World confirmed: ' + str(virusdata_world_confirmed_new) + ', recovered: ' + str(virusdata_world_recovered_new) + ', deaths: ' + str(virusdata_world_deaths_new))
+        logger.info(virusdata_world_updated + ' ==> World confirmed: ' + str(virusdata_world_confirmed_new) + ', recovered: ' + str(virusdata_world_recovered_new) + ', deaths: ' + str(virusdata_world_deaths_new))
     else:
         print("No world data: " + virusdata_world.text)
-        logging.info('World  ==> failed to get data')
+        logger.info('World  ==> failed to get data')
 
 # Pull data
-data_world_pull()
+if config_error == False:
+    data_world_pull()
 
 # Class to collect array and then pass to HTML page
 class CountryJSONtoArray:
@@ -140,12 +163,12 @@ class CountryJSONtoArray:
         self.virusdata_updated = lastUpdate
 
 # Data variables
-countries_data = []
+if config_error == False:
+    countries_data = []
 
 # Function to pull countries data
 def data_countries_pull():
     # Get updated data for countries
-    pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
     global countries_data
     countries_data.clear()
     for country in countries_config:
@@ -171,14 +194,15 @@ def data_countries_pull():
             print(country + " updated: " + virusdata_country_updated)
 
             # Log new values
-            logging.info(virusdata_country_updated + ' ==> ' + country + ' confirmed: ' + str(virusdata_country_confirmed) + ', recovered: ' + str(virusdata_country_recovered) + ', deaths: ' + str(virusdata_country_deaths))
+            logger.info(virusdata_country_updated + ' ==> ' + country + ' confirmed: ' + str(virusdata_country_confirmed) + ', recovered: ' + str(virusdata_country_recovered) + ', deaths: ' + str(virusdata_country_deaths))
             countries_data.append(CountryJSONtoArray(**virusdata_country_json)) # Using this to make it easier to use with Jinja
         else:
             print("No " + country + " data: " + virusdata_country.text)
-            logging.info(country + '  ==> failed to get data')
+            logger.info(country + '  ==> failed to get data')
 
 # Pull country data
-data_countries_pull()
+if config_error == False:
+    data_countries_pull()
 
 # Class to collect array and then pass to HTML page
 class RegionJSONtoArray:
@@ -191,12 +215,12 @@ class RegionJSONtoArray:
         self.virusdata_updated = lastUpdate
 
 # Data variables
-regions_data = []
+if config_error == False:
+    regions_data = []
 
 # Function to pull regions data
 def data_regions_pull():
     # Get updated data for countries
-    pulldatetime = time.strftime("%Y-%m-%d_%H%M%S")
     global regions_data
     regions_data.clear()
 
@@ -242,18 +266,19 @@ def data_regions_pull():
                         print(region + " updated: " + str(virusdata_region_updated))
 
                         # Log new values
-                        logging.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
+                        logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
                         regions_data.append(RegionJSONtoArray(**country_regions_item)) # Using this to make it easier to use with Jinja
 
                 if region_found == False:
                     print("No region data for: " + region)
-                    logging.info(region + ' no data')
+                    logger.info(region + ' no data')
     else:
         print("No regions data: " + virusdata_regions.text)
-        logging.info('Regions  ==> failed to get data')
+        logger.info('Regions  ==> failed to get data')
 
 # Pull country data
-data_regions_pull()
+if config_error == False:
+    data_regions_pull()
 
 # Create Flask app to build site
 app = Flask(__name__)
@@ -261,23 +286,32 @@ app = Flask(__name__)
 # Root page
 @app.route('/')
 def root():
-    logging.info(request.remote_addr + ' ==> Root page ')
-    data_world_pull()
-    data_countries_pull()
-    data_regions_pull()
-    return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_data=regions_data)
+    if config_error == False:
+        logger.info(request.remote_addr + ' ==> Root page ')
+        data_world_pull()
+        data_countries_pull()
+        data_regions_pull()
+        return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_data=regions_data)
+    else:
+        return redirect(url_for('errorpage'))
 
 # About page
 @app.route('/about')
 def about():
-    logging.info(request.remote_addr + ' ==> About page ')
+    logger.info(request.remote_addr + ' ==> About page ')
     return render_template('about.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email)
 
-# Maintenance template page
+# Maintenance page
 @app.route('/maint')
 def maint():
-    logging.info(request.remote_addr + ' ==> Maintenance page ')
+    logger.info(request.remote_addr + ' ==> Maintenance page ')
     return render_template('maintenance.html', logo=virustracker_logo, logosize=virustracker_logosize, email=virustracker_email)
+
+# Error page
+@app.route('/errorpage')
+def errorpage():
+    logger.info(request.remote_addr + ' ==> Error page ')
+    return render_template('error.html')
 
 # Run in debug mode if started from CLI
 if __name__ == '__main__':
