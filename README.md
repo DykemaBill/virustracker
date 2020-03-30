@@ -29,7 +29,7 @@ Web application written in Python using Flask which provides a single root page 
 - Change regions to hide by default in the page - DONE
 - License notice added - DONE
 - Log clean-up/archive - DONE
-- Add page refresh time to configuration
+- Add page refresh time to configuration - DONE
 - Add country maps and remove embedded world map
 - Add filter by state option
 - Look into direct OData access to Johns Hopkins University, likely separate project

@@ -7,8 +7,9 @@ config_file = 'virustracker'
 # Set default configuration variables
 virustracker_email = "needtosetinconfig@nowhere.com"
 virustracker_logo = "needtosetinconfig"
-virustracker_logosize = [ 100, 100 ]
-virustracker_logfilesize = [ 10000, 9 ]
+virustracker_logosize = [ 100, 100 ] # This is width and height
+virustracker_logfilesize = [ 10000, 9 ] # 10000 is 10k, 9 is 10 total copies
+virustracker_pagerefresh = 3600 # This is in seconds
 virustracker_apiroot = "https://needtosetinconfig/api"
 
 # Function to read configuration file
@@ -27,10 +28,12 @@ def config_file_read():
             global virustracker_logo
             global virustracker_logosize
             global virustracker_logfilesize
+            global virustracker_pagerefresh
             global virustracker_apiroot
             virustracker_logfilesize.clear()
             virustracker_logfilesize.append(json_data['logfilesize'][0])
             virustracker_logfilesize.append(json_data['logfilesize'][1])
+            virustracker_pagerefresh = json_data['pagerefresh']
             virustracker_email = json_data['email']
             virustracker_logo = json_data['logo']
             virustracker_logosize.clear()
@@ -76,6 +79,7 @@ else:
     logger.info('Email is set to: ' + virustracker_email)
     logger.info('Logo is set to: ' + virustracker_logo)
     logger.info('Logo size is set to: ' + str(virustracker_logosize[0]) + ', ' + str(virustracker_logosize[1]))
+    logger.info('Page refresh is set to: ' + str(virustracker_pagerefresh))
     logger.info('API path root is set to: ' + virustracker_apiroot)
     logger.info('Countries to display: ' + str(countries_config))
     logger.info('Regions to display: ' + str(regions_config))
@@ -291,7 +295,7 @@ def root():
         data_world_pull()
         data_countries_pull()
         data_regions_pull()
-        return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_data=regions_data)
+        return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, pagerefresh=virustracker_pagerefresh, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_data=regions_data)
     else:
         return redirect(url_for('errorpage'))
 
