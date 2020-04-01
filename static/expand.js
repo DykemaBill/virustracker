@@ -1,5 +1,5 @@
 // When item is clicked display hidden content
-function onClicked(element) {
+function clickExpand(element) {
     element.classList.toggle("active");
     var content;
     content = element.nextElementSibling;

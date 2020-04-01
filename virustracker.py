@@ -218,14 +218,25 @@ class RegionJSONtoArray:
         self.virusdata_deaths = deaths
         self.virusdata_updated = lastUpdate
 
+# Class to create non-duplicate list of short region names for filter controls
+class RegionShortJSONtoArray:
+    def __init__(self, iso3, region_short):
+        self.virusdata_country = iso3
+        self.virusdata_region_short = region_short
+
 # Data variables
 if config_error == False:
     regions_data = []
+
+# Region short list variables
+if config_error == False:
+    regions_short_list = []
 
 # Function to pull regions data
 def data_regions_pull():
     # Get updated data for countries
     global regions_data
+    global regions_short_list
     regions_data.clear()
 
     # Get confirmed data for all regions
@@ -246,6 +257,13 @@ def data_regions_pull():
 
                         # Found data for current region
                         region_found = True
+
+                        # Parse out just region/province/state name
+                        virusdata_region_list = region.split(',') # Split into parts
+                        virusdata_region_list_length = len(virusdata_region_list) # Number of parts
+                        virusdata_region_short_space = virusdata_region_list[virusdata_region_list_length-2] # Get the second to last part
+                        virusdata_region_short = virusdata_region_short_space.lstrip() # Remove leading space
+                        print(region + " short name is: " + str(virusdata_region_short))
 
                         # Get new confirmed value
                         virusdata_region_confirmed = int(country_regions_item['confirmed'])
@@ -273,6 +291,16 @@ def data_regions_pull():
                         logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
                         regions_data.append(RegionJSONtoArray(**country_regions_item)) # Using this to make it easier to use with Jinja
 
+                        # NEED TO GET THIS SECTION WORKING TO CLEAN-UP FILTER CONTROL
+                        # regions_short_list_length = len(regions_short_list) # Number of parts
+                        # print ("Regions short list array length is: " + str(regions_short_list_length))
+                        # if regions_short_list_length > 1:
+                        #     print ("Previous short array region name is: " + regions_short_list[regions_short_list_length-1])
+                        #     if regions_short_list[regions_short_list_length-1]['virusdata_region_short'] != virusdata_region_short:
+                        #         regions_short_list.append(RegionShortJSONtoArray(country_regions_item['iso3'], virusdata_region_short)) # Using this to make it easier to use with Jinja also
+                        # else:
+                        regions_short_list.append(RegionShortJSONtoArray(country_regions_item['iso3'], virusdata_region_short)) # Using this to make it easier to use with Jinja also
+
                 if region_found == False:
                     print("No region data for: " + region)
                     logger.info(region + ' no data')
@@ -295,7 +323,7 @@ def root():
         data_world_pull()
         data_countries_pull()
         data_regions_pull()
-        return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, pagerefresh=virustracker_pagerefresh, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_data=regions_data)
+        return render_template('main.html', logo=virustracker_logo, logosize=virustracker_logosize, pagerefresh=virustracker_pagerefresh, apiroot=virustracker_apiroot, email=virustracker_email, virusdata_world_confirmed=virusdata_world_confirmed, virusdata_world_confirmed_updated=virusdata_world_confirmed_updated,virusdata_world_recovered=virusdata_world_recovered, virusdata_world_recovered_updated=virusdata_world_recovered_updated, virusdata_world_deaths=virusdata_world_deaths, virusdata_world_deaths_updated=virusdata_world_deaths_updated, virusdata_world_updated=virusdata_world_updated, country_names=countries_config, countries_data=countries_data, regions_short_list=regions_short_list, regions_data=regions_data)
     else:
         return redirect(url_for('errorpage'))
 
