@@ -30,7 +30,7 @@ Web application written in Python using Flask which provides a single root page 
 - License notice added - DONE
 - Log clean-up/archive - DONE
 - Add page refresh time to configuration - DONE
-- Add filter by region option - IN PROCESS
+- Add filter by region option - DONE
 - Add country maps and remove embedded world map
 - Look into direct OData access to Johns Hopkins University, likely separate project
 
