@@ -210,7 +210,8 @@ if config_error == False:
 
 # Class to collect array and then pass to HTML page
 class RegionJSONtoArray:
-    def __init__(self, provinceState, countryRegion, lastUpdate, lat, long, confirmed, recovered, deaths, active, admin2, fips, combinedKey, incidentRate, peopleTested, iso2, iso3):
+    def __init__(self, region_short, provinceState, countryRegion, lastUpdate, lat, long, confirmed, recovered, deaths, active, admin2, fips, combinedKey, incidentRate, peopleTested, iso2, iso3):
+        self.virusdata_region_short = region_short
         self.virusdata_country = iso3
         self.virusdata_region = combinedKey
         self.virusdata_confirmed = confirmed
@@ -291,7 +292,7 @@ def data_regions_pull():
 
                         # Log new values
                         logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
-                        regions_data.append(RegionJSONtoArray(**country_regions_item)) # Using this to make it easier to use with Jinja
+                        regions_data.append(RegionJSONtoArray(virusdata_region_short, **country_regions_item)) # Using this to make it easier to use with Jinja
 
                         if virusdata_region_short != region_previous:
                             regions_short_list.append(RegionShortJSONtoArray(country_regions_item['iso3'], virusdata_region_short)) # Using this to make it easier to use with Jinja also

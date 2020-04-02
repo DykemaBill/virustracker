@@ -1,7 +1,8 @@
 // When item is clicked display hidden content
 function clickExpand(element) {
+    
     element.classList.toggle("active");
-    var content;
+    let content;
     content = element.nextElementSibling;
     if (content.style.display === "block") {
         content.style.display = "none";

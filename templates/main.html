@@ -13,6 +13,7 @@
     <!-- Created by Bill Dykema - https://github.com/DykemaBill
     MIT License 2020 - https://mit-license.org -->
     <script src="{{ url_for('static', filename='expand.js') }}"></script>
+    <script src="{{ url_for('static', filename='filter.js') }}"></script>
 
     <div class="wrapper">
 
@@ -111,18 +112,18 @@
         <label class="expand_control" onclick="clickExpand(this)">&#8227; &#8227; &#8227;</label>
         <div class="expand_content">
             <!-- {{ country }} filter for regions -->
-            <select onclick="clickFilter(this)">
+            <!-- <select onchange="setFilter(this.value, '{{ country }}')">
                 <option value="All">All</option>
                 {% for region_short in regions_short_list %}
                     {% if region_short['virusdata_country'] == country %}
                         <option value="{{ region_short['virusdata_region_short'] }}">{{ region_short['virusdata_region_short'] }}</option>
                     {% endif %}
                 {% endfor %}
-            </select>
+            </select> -->
             {% for region_data in regions_data %}
                 {% if region_data['virusdata_country'] == country %}
                     <!-- {{ country }}, {{ region_data['virusdata_region'] }} data here -->
-                    <div class="kpis">
+                    <div class="kpis {{ country }}" id="{{ region_data['virusdata_region_short'] }}">
                         <div class="regtitle">
                             <h4>{{ region_data['virusdata_region'] }}</h4>
                         </div>
