@@ -111,14 +111,14 @@
         <label class="expand_control" onclick="clickExpand(this)">&#8227; &#8227; &#8227;</label>
         <div class="expand_content">
             <!-- {{ country }} filter for regions -->
-            <!-- <select onclick="clickFilter(this)">
+            <select onclick="clickFilter(this)">
                 <option value="All">All</option>
                 {% for region_short in regions_short_list %}
                     {% if region_short['virusdata_country'] == country %}
                         <option value="{{ region_short['virusdata_region_short'] }}">{{ region_short['virusdata_region_short'] }}</option>
                     {% endif %}
                 {% endfor %}
-            </select> -->
+            </select>
             {% for region_data in regions_data %}
                 {% if region_data['virusdata_country'] == country %}
                     <!-- {{ country }}, {{ region_data['virusdata_region'] }} data here -->

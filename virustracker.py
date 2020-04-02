@@ -237,7 +237,9 @@ def data_regions_pull():
     # Get updated data for countries
     global regions_data
     global regions_short_list
+    region_previous = ""
     regions_data.clear()
+    regions_short_list.clear()
 
     # Get confirmed data for all regions
     virusdata_regions = requests.get(virustracker_apiroot + "/confirmed")
@@ -291,15 +293,9 @@ def data_regions_pull():
                         logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
                         regions_data.append(RegionJSONtoArray(**country_regions_item)) # Using this to make it easier to use with Jinja
 
-                        # NEED TO GET THIS SECTION WORKING TO CLEAN-UP FILTER CONTROL
-                        # regions_short_list_length = len(regions_short_list) # Number of parts
-                        # print ("Regions short list array length is: " + str(regions_short_list_length))
-                        # if regions_short_list_length > 1:
-                        #     print ("Previous short array region name is: " + regions_short_list[regions_short_list_length-1])
-                        #     if regions_short_list[regions_short_list_length-1]['virusdata_region_short'] != virusdata_region_short:
-                        #         regions_short_list.append(RegionShortJSONtoArray(country_regions_item['iso3'], virusdata_region_short)) # Using this to make it easier to use with Jinja also
-                        # else:
-                        regions_short_list.append(RegionShortJSONtoArray(country_regions_item['iso3'], virusdata_region_short)) # Using this to make it easier to use with Jinja also
+                        if virusdata_region_short != region_previous:
+                            regions_short_list.append(RegionShortJSONtoArray(country_regions_item['iso3'], virusdata_region_short)) # Using this to make it easier to use with Jinja also
+                            region_previous = virusdata_region_short
 
                 if region_found == False:
                     print("No region data for: " + region)
