@@ -342,6 +342,12 @@ def errorpage():
     logger.info(request.remote_addr + ' ==> Error page ')
     return render_template('error.html')
 
+# IE notice page
+@app.route('/ienotice')
+def ienotice():
+    logger.info(request.remote_addr + ' ==> IE notice page ')
+    return render_template('ienotice.html')
+
 # Run in debug mode if started from CLI
 if __name__ == '__main__':
     app.run(debug=True)
