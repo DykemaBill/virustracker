@@ -1,22 +1,13 @@
 // Web browser check
 
-if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) { //test for MSIE x.x;
-  let ieversion=new Number(RegExp.$1) // capture x.x portion and store as a number
-  if (ieversion>=8) {
-   console.log("You're using IE8 or above");
-   ieNotice();
-  } else if (ieversion>=7) {
-   console.log("You're using IE7.x");
-   ieNotice();
-  } else if (ieversion>=6) {
-   console.log("You're using IE6.x");
-   ieNotice();
-  } else if (ieversion>=5) {
-   console.log("You're using IE5.x");
-   ieNotice();
-  }
- }
+let IE11 = navigator.userAgent.toUpperCase().indexOf("TRIDENT/");
+console.log("The IE11 check returns: " + IE11);
+let IE11orOlder = navigator.userAgent.toUpperCase().indexOf("MSIE");
+console.log("The IE11orOlder check returns: " + IE11orOlder);
 
- function ieNotice() {
+if ( IE11 == -1 && IE11orOlder == -1 ) {
+  console.log("You're not using IE 11 or older");
+} else {
+  console.log("You are using IE");
   window.location = "ienotice";
- }
+}
