@@ -31,6 +31,7 @@ Web application written in Python using Flask which provides a single root page 
 - Log clean-up/archive - DONE
 - Add page refresh time to configuration - DONE
 - Add filter by region option - DONE
+- Embed Dash chart into Flask
 - Add country maps and remove embedded world map
 - Look into direct OData access to Johns Hopkins University, likely separate project
 

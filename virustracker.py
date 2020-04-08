@@ -1,5 +1,7 @@
 from flask import Flask, render_template, json, request, redirect, url_for
-import requests, logging, logging.handlers, time, numbers, os
+import requests, logging, logging.handlers, time, numbers, os, dash
+import dash_core_components as dash_cc
+import dash_html_components as dash_html
 
 # Configuration file name
 config_file = 'virustracker'
@@ -219,6 +221,9 @@ class RegionJSONtoArray:
         self.virusdata_deaths = deaths
         self.virusdata_updated = lastUpdate
 
+    # def __repr__(self, region_short, confirmed, recovered, deaths):
+    #     return 'Test("%s","%s","%s", "%s")' % (self.virusdata_region_short, self.virusdata_confirmed, self.virusdata_recovered, self.virusdata_recovered)
+
 # Class to create non-duplicate list of short region names for filter controls
 class RegionShortJSONtoArray:
     def __init__(self, iso3, region_short):
@@ -312,7 +317,7 @@ if config_error == False:
 # Create Flask app to build site
 app = Flask(__name__)
 
-# Root page
+# Flask Root page
 @app.route('/')
 def root():
     if config_error == False:
@@ -324,29 +329,67 @@ def root():
     else:
         return redirect(url_for('errorpage'))
 
-# About page
+# Flask About page
 @app.route('/about')
 def about():
     logger.info(request.remote_addr + ' ==> About page ')
     return render_template('about.html', logo=virustracker_logo, logosize=virustracker_logosize, apiroot=virustracker_apiroot, email=virustracker_email)
 
-# Maintenance page
+# Flask Maintenance page
 @app.route('/maint')
 def maint():
     logger.info(request.remote_addr + ' ==> Maintenance page ')
     return render_template('maintenance.html', logo=virustracker_logo, logosize=virustracker_logosize, email=virustracker_email)
 
-# Error page
+# Flask Error page
 @app.route('/errorpage')
 def errorpage():
     logger.info(request.remote_addr + ' ==> Error page ')
     return render_template('error.html')
 
-# IE notice page
+# Flask IE notice page
 @app.route('/ienotice')
 def ienotice():
     logger.info(request.remote_addr + ' ==> IE notice page ')
     return render_template('ienotice.html')
+
+# Build charts
+# test_data = []
+# test_data.clear()
+# test_data.append({ "virusdata_region_short": [ "Region A", "Region B" ], "virusdata_confirmed": [ 10, 20 ], "virusdata_deaths": [ 3, 6 ] })
+
+# blahblah = eval(repr(regions_data))
+# print (blahblah)
+
+# Create Dash chart on top of Flask
+charts = dash.Dash(__name__, server=app, url_base_pathname='/charts/')
+
+# Dash Chart page
+charts.layout = dash_html.Div(children=[
+    
+    dash_html.H1(children='Virus chart title here'),
+
+    dash_html.Div(children='''
+    
+        Virus chart content here.
+    
+    '''),
+
+    dash_cc.Graph(
+        id='regions-graph',
+        figure={
+            'data': [
+                # {'x': test_data['virusdata_region_short'], 'y': test_data['virusdata_confirmed'], 'type': 'bar', 'name': 'Confirmed'},
+                # {'x': test_data['virusdata_region_short'], 'y': test_data['virusdata_deaths'], 'type': 'bar', 'name': 'Deaths'},
+                {'x': [ "Region A", "Region B" ], 'y': [ 10, 20 ], 'type': 'bar', 'name': 'Confirmed'},
+                {'x': [ "Region A", "Region B" ], 'y': [ 3, 6 ], 'type': 'bar', 'name': 'Deaths'},
+            ],
+            'layout': {
+                'title': 'Regions'
+            }
+        }
+    )
+])
 
 # Run in debug mode if started from CLI
 if __name__ == '__main__':
