@@ -223,10 +223,13 @@ class RegionJSONtoArray:
         self.virusdata_longitude = long
         self.virusdata_updated = lastUpdate
 
-    def __repr__(self):
-        return {'region':self.virusdata_region_short, 'confirmed':self.virusdata_confirmed, 'recovered':self.virusdata_recovered, 'deaths':self.virusdata_deaths, 'latitude':self.virusdata_latitude, 'longitude':self.virusdata_longitude}
-    # def __repr__(self, region_short, confirmed, recovered, deaths):
-    #     return 'Test("%s","%s","%s", "%s")' % (self.virusdata_region_short, self.virusdata_confirmed, self.virusdata_recovered, self.virusdata_recovered)
+    # def __str__(self):
+    #     return "{{ 'region': '{0}', 'confirmed': {1}, 'recovered': {2}, 'deaths': {3}, 'latitude': {4}, 'longitude': {5} }}".format(self.virusdata_region,self.virusdata_confirmed,self.virusdata_recovered,self.virusdata_deaths,self.virusdata_latitude,self.virusdata_longitude)
+
+    # def __repr__(self):
+    #     return self.virusdata_region,self.virusdata_confirmed,self.virusdata_recovered,self.virusdata_deaths,self.virusdata_latitude,self.virusdata_longitude
+
+    # __repr__ = __str__
 
 # Class to create non-duplicate list of short region names for filter controls
 class RegionShortJSONtoArray:
@@ -358,14 +361,11 @@ def ienotice():
     return render_template('ienotice.html')
 
 # Build charts
-test_data = []
-test_data.clear()
-test_data.append({ "virusdata_region_short": [ "Region A", "Region B" ], "virusdata_confirmed": [ 10, 20 ], "virusdata_deaths": [ 3, 6 ] })
-print (test_data)
-#print (regions_data)
-
-# blahblah = eval(repr(regions_data))
-# print (blahblah)
+print ("** Need to create a list for each item needed! **")
+first_item = regions_data[0].virusdata_region
+first_item_confirmed = regions_data[0].virusdata_confirmed
+first_item_deaths = regions_data[0].virusdata_deaths
+print (str(first_item) + ": " + str(first_item_confirmed) + ", " + str(first_item_deaths))
 
 # Create Dash chart on top of Flask
 charts = dash.Dash(__name__, server=app, url_base_pathname='/charts/')
@@ -385,8 +385,8 @@ charts.layout = dash_html.Div(children=[
         id='regions-graph',
         figure={
             'data': [
-                # {'x': test_data['virusdata_region_short'], 'y': test_data['virusdata_confirmed'], 'type': 'bar', 'name': 'Confirmed'},
-                # {'x': test_data['virusdata_region_short'], 'y': test_data['virusdata_deaths'], 'type': 'bar', 'name': 'Deaths'},
+                # {'x': regions_data.virusdata_region, 'y': [ 10, 20 ], 'type': 'bar', 'name': 'Confirmed'},
+                # {'x': regions_data.virusdata_region, 'y': [ 3, 6 ], 'type': 'bar', 'name': 'Deaths'},
                 {'x': [ "Region A", "Region B" ], 'y': [ 10, 20 ], 'type': 'bar', 'name': 'Confirmed'},
                 {'x': [ "Region A", "Region B" ], 'y': [ 3, 6 ], 'type': 'bar', 'name': 'Deaths'},
             ],
