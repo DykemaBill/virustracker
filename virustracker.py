@@ -219,8 +219,12 @@ class RegionJSONtoArray:
         self.virusdata_confirmed = confirmed
         self.virusdata_recovered = recovered
         self.virusdata_deaths = deaths
+        self.virusdata_latitude = lat
+        self.virusdata_longitude = long
         self.virusdata_updated = lastUpdate
 
+    def __repr__(self):
+        return {'region':self.virusdata_region_short, 'confirmed':self.virusdata_confirmed, 'recovered':self.virusdata_recovered, 'deaths':self.virusdata_deaths, 'latitude':self.virusdata_latitude, 'longitude':self.virusdata_longitude}
     # def __repr__(self, region_short, confirmed, recovered, deaths):
     #     return 'Test("%s","%s","%s", "%s")' % (self.virusdata_region_short, self.virusdata_confirmed, self.virusdata_recovered, self.virusdata_recovered)
 
@@ -354,9 +358,11 @@ def ienotice():
     return render_template('ienotice.html')
 
 # Build charts
-# test_data = []
-# test_data.clear()
-# test_data.append({ "virusdata_region_short": [ "Region A", "Region B" ], "virusdata_confirmed": [ 10, 20 ], "virusdata_deaths": [ 3, 6 ] })
+test_data = []
+test_data.clear()
+test_data.append({ "virusdata_region_short": [ "Region A", "Region B" ], "virusdata_confirmed": [ 10, 20 ], "virusdata_deaths": [ 3, 6 ] })
+print (test_data)
+#print (regions_data)
 
 # blahblah = eval(repr(regions_data))
 # print (blahblah)
