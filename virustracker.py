@@ -360,24 +360,27 @@ def ienotice():
     logger.info(request.remote_addr + ' ==> IE notice page ')
     return render_template('ienotice.html')
 
-# Build charts
-print ("** Need to create a list for each item needed! **")
-first_item = regions_data[0].virusdata_region
-first_item_confirmed = regions_data[0].virusdata_confirmed
-first_item_deaths = regions_data[0].virusdata_deaths
-print (str(first_item) + ": " + str(first_item_confirmed) + ", " + str(first_item_deaths))
-
+# Chart name
+regions_chart_country = regions_data[0].virusdata_country
+# Region dimensions and their measures
 regions_chart_names = []
 regions_chart_confirmed = []
 regions_chart_deaths = []
 regions_chart_longitude = []
 regions_chart_latitude = []
+# Clear lists from previous
+regions_chart_names.clear()
+regions_chart_confirmed.clear()
+regions_chart_deaths.clear()
+regions_chart_longitude.clear()
+regions_chart_latitude.clear()
+# Get values for each
 for region_data in regions_data:
-    regions_chart_names = region_data.virusdata_region
-    regions_chart_confirmed = region_data.virusdata_confirmed
-    regions_chart_deaths = region_data.virusdata_deaths
-    regions_chart_longitude = region_data.virusdata_longitude
-    regions_chart_latitude = region_data.virusdata_latitude
+    regions_chart_names.append(region_data.virusdata_region)
+    regions_chart_confirmed.append(int(region_data.virusdata_confirmed))
+    regions_chart_deaths.append(int(region_data.virusdata_deaths))
+    regions_chart_longitude.append(float(region_data.virusdata_longitude))
+    regions_chart_latitude.append(float(region_data.virusdata_latitude))
 
 # Create Dash chart on top of Flask
 charts = dash.Dash(__name__, server=app, url_base_pathname='/charts/')
@@ -385,26 +388,22 @@ charts = dash.Dash(__name__, server=app, url_base_pathname='/charts/')
 # Dash Chart page
 charts.layout = dash_html.Div(children=[
     
-    dash_html.H1(children='Virus chart title here'),
+    # dash_html.H1(children=regions_chart_country + ' Virus Cases'),
 
-    dash_html.Div(children='''
-    
-        Virus chart content here.
-    
-    '''),
+    # dash_html.Div(children='''
+    #     Below are cases shown by confirmed and deaths
+    # '''),
 
     dash_cc.Graph(
         id='regions-graph',
         figure={
             'data': [
-                {'x': regions_chart_names, 'y': [ 10, 20 ], 'type': 'bar', 'name': 'Confirmed'},
-                {'x': regions_chart_names, 'y': [ 3, 6 ], 'type': 'bar', 'name': 'Deaths'},
-                # {'x': [ "Region A", "Region B" ], 'y': [ 10, 20 ], 'type': 'bar', 'name': 'Confirmed'},
-                # {'x': [ "Region A", "Region B" ], 'y': [ 3, 6 ], 'type': 'bar', 'name': 'Deaths'},
+                {'x': regions_chart_names, 'y': regions_chart_confirmed, 'type': 'bar', 'name': 'Confirmed'},
+                {'x': regions_chart_names, 'y': regions_chart_deaths, 'type': 'bar', 'name': 'Deaths'},
             ],
-            'layout': {
-                'title': 'Regions'
-            }
+            # 'layout': {
+            #     'title': 'Regions'
+            # }
         }
     )
 ])
