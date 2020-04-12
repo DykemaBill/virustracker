@@ -210,7 +210,7 @@ if config_error == False:
 
 # Class to collect array and then pass to HTML page
 class RegionJSONtoArray:
-    def __init__(self, region_short, provinceState, countryRegion, lastUpdate, lat, long, confirmed, recovered, deaths, active, admin2, fips, combinedKey, incidentRate, peopleTested, iso2, iso3):
+    def __init__(self, region_short, provinceState, countryRegion, lastUpdate, lat, long, confirmed, recovered, deaths, active, admin2, fips, combinedKey, incidentRate, peopleTested, peopleHospitalized, uid, iso2, iso3):
         self.virusdata_region_short = region_short
         self.virusdata_country = iso3
         self.virusdata_region = combinedKey
