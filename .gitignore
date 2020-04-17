@@ -5,3 +5,4 @@
 .DS_Store
 .vscode
 env
+zappa_settings.json
