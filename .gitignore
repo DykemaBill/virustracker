@@ -4,3 +4,6 @@
 *_old.*
 .DS_Store
 .vscode
+env
+zappa_settings.json
+*.pyc
