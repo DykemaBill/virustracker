@@ -31,8 +31,11 @@ Web application written in Python using Flask which provides a single root page 
 - Log clean-up/archive - DONE
 - Add page refresh time to configuration - DONE
 - Add filter by region option - DONE
-- Add country maps and remove embedded world map
-- Look into direct OData access to Johns Hopkins University, likely separate project
+- Add status page to show server info, status of configuration, and logs - 
+- Add options to disable logs automatically and via configuration - 
+- Add option to control location of config and logs - 
+- Add country maps and remove embedded world map - Started Dash branch
+- Look into direct OData access to Johns Hopkins University or other JSON API such as ESRI - 
 
 # License
 
