@@ -10,38 +10,39 @@
     <link rel="shortcut icon" media="all" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 <body>
-    <!-- Created by Bill Dykema - https://github.com/DykemaBill
-    MIT License 2020 - https://mit-license.org -->
+
     <div class="wrapper">
 
         <div class="header">
 
-        <div>
-            <img src="{{ logo }}" style="width:{{ logosize[0] }}px;height:{{ logosize[1] }}px;">
-        </div>
-
-            <h2>NOTICE</h2>
-            
-            <h1><a href="status">i</a></h1>
+            <h2>Status</h2>
                 
             <h4><p>Date: <span id="datetime"></span></p>
             <script>var dt = new Date(); document.getElementById("datetime").innerHTML=dt.toLocaleString();</script></h4>
 
         </div>
 
-        <div class="description">
+        <div class="description config-items">
 
-            We are performing some maintenance tasks.
-            <br><br>
-            Thank you for your patience!
+            <h4>The Python version this app is running on is:</h4>
 
-        </div>
+            <p>{{ running_python }}</p>
 
-        <div class="description">
+            <h4>The system this app is running on is:</h4>
+            
+            <p>{{ running_os }}</p>
 
-            <h4>Information <a href="about">about</a> this page</h4>
-            <p>Copyright © 2020 <a href="https://github.com/DykemaBill">Bill Dykema</a>, 
-            <a href="https://mit-license.org">MIT License 2020</a></p>
+            <h4>The hardware this app is running on:</h4>
+
+            <p>{{ running_hardware }}</p>
+
+            <h4>Here is what is in the configuration file:</h4>
+
+            <p>{{ config_data }}</p>
+
+            <h4>Here is what is in the most recent log file:</h4>
+
+            <p>{{ log_data }}</p>
 
         </div>
 

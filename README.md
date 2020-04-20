@@ -31,7 +31,7 @@ Web application written in Python using Flask which provides a single root page 
 - Log clean-up/archive - DONE
 - Add page refresh time to configuration - DONE
 - Add filter by region option - DONE
-- Add status page to show server info, status of configuration, and logs - 
+- Add status page to show server info, status of configuration, and logs - DONE
 - Add options to disable logs automatically and via configuration - 
 - Add option to control location of config and logs - 
 - Authorization page to modify config from web page - 

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, json, request, redirect, url_for
-import requests, logging, logging.handlers, time, numbers, os
+import requests, logging, logging.handlers, time, numbers, os, platform, sys
 
 # Configuration file name
 config_file = 'virustracker'
@@ -347,6 +347,27 @@ def errorpage():
 def ienotice():
     logger.info(request.remote_addr + ' ==> IE notice page ')
     return render_template('ienotice.html')
+
+# Status page
+@app.route('/status')
+def status():
+    logger.info(request.remote_addr + ' ==> Status page ')
+    running_python = sys.version.split('\n')
+    running_os = platform.system()
+    running_hardware = platform.machine()
+    try:
+        with open(config_file + '.cfg', 'r') as json_file:
+            config_data = json.loads(json_file.read())
+    except IOError:
+        print('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
+        config_data = "Unable to read config file " + config_file + '.cfg'
+    try:
+        with open(log_file, 'r') as logging_file:
+            log_data = logging_file.read()
+    except IOError:
+        print('Problem opening ' + log_file + ', check to make sure your log file location is valid.')
+        log_data = "Unable to read log file " + log_file
+    return render_template('status.html', running_python=running_python, running_os=running_os, running_hardware=running_hardware, config_data=config_data, log_data=log_data)
 
 # Run in debug mode if started from CLI
 if __name__ == '__main__':

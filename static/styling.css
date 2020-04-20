@@ -18,6 +18,13 @@
   width: 200px;
   padding: 1em;
 }
+.header > h1{
+  position: absolute;
+  font-family: "Courier New";
+  top: 20px;
+  right: 20px;
+  padding: 1em;
+}
 .description{
   padding: 1em;
   text-align: center;
@@ -153,4 +160,10 @@
 }
 .select-items div:hover, .same-as-selected {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Conifguration items */
+.config-items > p{
+  font-family: "Courier New";
+  text-align: left;
 }
