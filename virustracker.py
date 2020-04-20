@@ -353,6 +353,7 @@ def ienotice():
 def status():
     logger.info(request.remote_addr + ' ==> Status page ')
     running_python = sys.version.split('\n')
+    running_host = platform.node()
     running_os = platform.system()
     running_hardware = platform.machine()
     try:
@@ -367,7 +368,7 @@ def status():
     except IOError:
         print('Problem opening ' + log_file + ', check to make sure your log file location is valid.')
         log_data = "Unable to read log file " + log_file
-    return render_template('status.html', running_python=running_python, running_os=running_os, running_hardware=running_hardware, config_data=config_data, log_data=log_data)
+    return render_template('status.html', running_python=running_python, running_host=running_host, running_os=running_os, running_hardware=running_hardware, config_data=config_data, log_data=log_data)
 
 # Run in debug mode if started from CLI
 if __name__ == '__main__':
