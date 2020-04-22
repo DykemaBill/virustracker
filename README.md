@@ -35,6 +35,7 @@ Web application written in Python using Flask which provides a single root page 
 - Add options to disable logs automatically and via configuration - 
 - Add option to control location of config and logs - 
 - Authorization page to modify config from web page - 
+- Clean-up status page so it looks better - 
 - Add country maps and remove embedded world map - Started Dash branch
 - Look into direct OData access to Johns Hopkins University or other JSON API such as ESRI - 
 

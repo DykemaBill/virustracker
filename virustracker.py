@@ -357,8 +357,8 @@ def status():
     running_os = platform.system()
     running_hardware = platform.machine()
     try:
-        with open(config_file + '.cfg', 'r') as json_file:
-            config_data = json.loads(json_file.read())
+        with open(config_file + '.cfg', 'r') as text_file:
+            config_data = text_file.read()
     except IOError:
         print('Problem opening ' + config_file + '.cfg, check to make sure your configuration file is not missing.')
         config_data = "Unable to read config file " + config_file + '.cfg'
