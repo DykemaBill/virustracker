@@ -273,8 +273,8 @@ def data_regions_pull():
                         print(region + " confirmed is: " + str(virusdata_region_confirmed))
 
                         # Get new recovered value
-                        virusdata_region_recovered = int(country_regions_item['recovered'])
-                        print(region + " recovered is: " + str(virusdata_region_recovered))
+                        #virusdata_region_recovered = int(country_regions_item['recovered'])
+                        #print(region + " recovered is: " + str(virusdata_region_recovered))
 
                         # Get new deaths value
                         virusdata_region_deaths = int(country_regions_item['deaths'])
@@ -291,7 +291,8 @@ def data_regions_pull():
                         print(region + " updated: " + str(virusdata_region_updated))
 
                         # Log new values
-                        logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
+                        #logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', recovered: ' + str(virusdata_region_recovered) + ', deaths: ' + str(virusdata_region_deaths))
+                        logger.info(str(virusdata_region_updated) + ' ==> ' + region + ' confirmed: ' + str(virusdata_region_confirmed) + ', deaths: ' + str(virusdata_region_deaths))
                         regions_data.append(RegionJSONtoArray(virusdata_region_short, **country_regions_item)) # Using this to make it easier to use with Jinja
 
                         if virusdata_region_short != region_previous:
